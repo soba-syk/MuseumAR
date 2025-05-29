@@ -112,8 +112,10 @@
 
         // Pause button functionality
         pauseBtn.addEventListener("click", () => {
-          video.pause();
-          isPlaying = false;
+          video.muted = true;
+          video.pause().then(() => {
+            isPlaying = false;
+          }).catch(() => {});
         });
 
         // Pause and reset on marker lost
@@ -124,11 +126,11 @@
         });
 
         // Resume if previously playing
-        target.addEventListener("targetFound", () => {
-          if (isPlaying) {
-            video.play().catch(() => {});
-          }
-        });
+        // target.addEventListener("targetFound", () => {
+        //   if (isPlaying) {
+        //     video.play().catch(() => {});
+        //   }
+        // });
 
         // Unlock autoplay for iOS
         document.body.addEventListener("click", () => {
