@@ -20,11 +20,11 @@
     </style>
 
     <script>
-      // Fallback: manual video play on user interaction (needed on iOS sometimes)
       document.addEventListener("click", () => {
         const vid = document.getElementById("video1");
-        if (vid && vid.paused) {
-          vid.play().catch(err => console.warn("Autoplay failed:", err));
+        if (vid) {
+          vid.muted = false;
+          vid.play().catch(err => console.warn("Manual play failed:", err));
         }
       });
 
