@@ -51,18 +51,19 @@
           src="./Video_Lmns_Encoded.mp4"
           muted
           playsinline 
-          loop 
           preload="auto" 
           crossorigin="anonymous"
           style="display: none"
         ></video>
+        <!-- Button icons -->
         <img id="play-icon" src="https://cdn-icons-png.flaticon.com/512/727/727245.png" />
         <img id="pause-icon" src="https://cdn-icons-png.flaticon.com/512/727/727269.png" />
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-      <a-entity mindar-image-target="targetIndex: 0; persistent: true">
+      <!-- Target without persistent: true -->
+      <a-entity mindar-image-target="targetIndex: 0">
         <!-- Video -->
         <a-video 
           id="ar-video" 
@@ -72,7 +73,7 @@
           position="0 0 0"
         ></a-video>
 
-        <!-- Play/Pause Button (just below the video) -->
+        <!-- Play/Pause Button -->
         <a-image
           id="playPauseBtn"
           src="#play-icon"
@@ -93,37 +94,48 @@
         const playIcon = document.getElementById("play-icon").getAttribute("src");
         const pauseIcon = document.getElementById("pause-icon").getAttribute("src");
 
-        // Play/Pause toggle in AR
+        let isPlaying = false;
+
+        // Toggle button inside AR
         playPauseBtn.addEventListener("click", () => {
-          if (video.paused) {
-            video.play();
-            playPauseBtn.setAttribute("src", pauseIcon);
+          if (video.paused || video.ended) {
+            video.play().then(() => {
+              isPlaying = true;
+              playPauseBtn.setAttribute("src", pauseIcon);
+            }).catch(() => {});
           } else {
             video.pause();
+            isPlaying = false;
             playPauseBtn.setAttribute("src", playIcon);
           }
         });
 
-        // Auto-play fallback on user interaction (iOS)
+        // Pause & reset when image is lost
+        target.addEventListener("targetLost", () => {
+          video.pause();
+          video.currentTime = 0;
+          isPlaying = false;
+          playPauseBtn.setAttribute("src", playIcon);
+        });
+
+        // Optional: if found and was playing before, resume
+        target.addEventListener("targetFound", () => {
+          if (isPlaying) {
+            video.play().catch(() => {});
+          }
+        });
+
+        // Fallback: iOS touch trigger
         document.body.addEventListener("click", () => {
           if (video && video.paused) {
             video.play().catch(() => {});
           }
         });
 
-        // Reset video and icon on marker lost
-        target.addEventListener("targetLost", () => {
-          video.pause();
-          video.currentTime = 0;
-          playPauseBtn.setAttribute("src", playIcon);
-        });
-
         // Hide loading screen
         const scene = document.querySelector('a-scene');
         const loadingEl = document.getElementById('loading');
-        if (scene) {
-          scene.addEventListener('loaded', () => loadingEl.style.display = 'none');
-        }
+        scene.addEventListener('loaded', () => loadingEl.style.display = 'none');
         setTimeout(() => {
           loadingEl.style.display = 'none';
         }, 10000);
