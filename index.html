@@ -30,33 +30,12 @@
         z-index: 9999;
         font-size: 1.2rem;
       }
-
-      #muteBtn {
-        position: fixed;
-        bottom: 20px;
-        right: 20px;
-        z-index: 10000;
-        padding: 10px 16px;
-        background: rgba(0,0,0,0.6);
-        color: white;
-        border: none;
-        border-radius: 8px;
-        font-size: 1rem;
-        cursor: pointer;
-      }
-
-      #muteBtn:hover {
-        background: rgba(255,255,255,0.2);
-      }
     </style>
   </head>
 
   <body>
     <!-- Loading screen -->
     <div id="loading">Sobar jap AR nak bukak dah...</div>
-
-    <!-- Mute/Unmute Button -->
-    <button id="muteBtn">🔇</button>
 
     <a-scene 
       mindar-image="imageTargetSrc: ./muziumN9.mind" 
@@ -78,17 +57,31 @@
           crossorigin="anonymous"
           style="display: none"
         ></video>
+        <img id="muteIcon" src="https://cdn-icons-png.flaticon.com/512/727/727245.png" />
+        <img id="unmuteIcon" src="https://cdn-icons-png.flaticon.com/512/727/727269.png" />
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
+      <!-- AR Target with video -->
       <a-entity mindar-image-target="targetIndex: 0; persistent: true">
         <a-video 
+          id="ar-video" 
           src="#video1" 
           width="1" 
           height="0.65" 
           position="0 0 0"
         ></a-video>
+
+        <!-- Mute/Unmute Button in AR -->
+        <a-image 
+          id="muteToggle" 
+          src="#unmuteIcon" 
+          position="0 -0.5 0" 
+          width="0.2" 
+          height="0.2" 
+          class="clickable"
+        ></a-image>
       </a-entity>
     </a-scene>
 
@@ -96,41 +89,39 @@
       document.addEventListener("DOMContentLoaded", () => {
         const video = document.getElementById("video1");
         const target = document.querySelector('[mindar-image-target]');
-        const muteBtn = document.getElementById("muteBtn");
+        const muteToggle = document.getElementById("muteToggle");
+        const muteIcon = document.getElementById("muteIcon").getAttribute("src");
+        const unmuteIcon = document.getElementById("unmuteIcon").getAttribute("src");
 
-        // Safari autoplay fallback
+        // Autoplay fallback on iOS
         document.body.addEventListener("click", () => {
-          if (video && video.paused) {
+          if (video.paused) {
             video.play().catch(() => {});
           }
         });
 
-        // Play video when marker found
+        // Play when target is found
         target.addEventListener("targetFound", () => {
           video.play().catch(() => {});
         });
 
-        // Pause and reset video when marker lost
+        // Pause & reset when target is lost
         target.addEventListener("targetLost", () => {
           video.pause();
-          video.currentTime = 0;
+          video.currentTime = 0;  // Ensure reset
         });
 
-        // Mute/unmute toggle
-        muteBtn.addEventListener("click", () => {
+        // Toggle mute/unmute inside AR
+        muteToggle.addEventListener("click", () => {
           video.muted = !video.muted;
-          muteBtn.textContent = video.muted ? "🔇" : "🔊";
+          muteToggle.setAttribute("src", video.muted ? unmuteIcon : muteIcon);
         });
 
-        // Hide loading screen after scene loads
+        // Hide loading after scene is ready
         const scene = document.querySelector('a-scene');
         const loadingEl = document.getElementById('loading');
-        if (scene) {
-          scene.addEventListener('loaded', () => loadingEl.style.display = 'none');
-        }
-        setTimeout(() => {
-          loadingEl.style.display = 'none';
-        }, 10000);
+        scene.addEventListener('loaded', () => loadingEl.style.display = 'none');
+        setTimeout(() => loadingEl.style.display = 'none', 10000);
       });
     </script>
   </body>
