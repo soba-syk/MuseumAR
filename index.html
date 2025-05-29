@@ -17,46 +17,25 @@
         top: 0;
         left: 0;
       }
+
+      #loading {
+        position: fixed;
+        top: 0; left: 0;
+        width: 100%; height: 100%;
+        background: #000;
+        color: white;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        z-index: 9999;
+        font-size: 1.2rem;
+      }
     </style>
-
-    <script>
-      // Fallback: manual video play on user interaction (needed on iOS sometimes)
-      document.addEventListener("click", () => {
-        const vid = document.getElementById("video1");
-        if (vid && vid.paused) {
-          vid.play().catch(err => console.warn("Autoplay failed:", err));
-        }
-      });
-
-      // Hide loading screen after scene is ready or 10s max
-      window.addEventListener('DOMContentLoaded', () => {
-        const scene = document.querySelector('a-scene');
-        const loadingEl = document.getElementById('loading');
-        if (scene) {
-          scene.addEventListener('loaded', () => loadingEl.style.display = 'none');
-        }
-        setTimeout(() => {
-          loadingEl.style.display = 'none';
-        }, 10000); // fallback
-      });
-    </script>
   </head>
 
   <body>
     <!-- Loading screen -->
-    <div id="loading" style="
-      position: fixed;
-      top: 0; left: 0;
-      width: 100%; height: 100%;
-      background: #000;
-      color: white;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      z-index: 9999;
-      font-size: 1.2rem;">
-      Sobar jap AR nak bukak dah...
-    </div>
+    <div id="loading">Sobar jap AR nak bukak dah...</div>
 
     <a-scene 
       mindar-image="imageTargetSrc: ./muziumN9.mind" 
@@ -70,24 +49,85 @@
         <video 
           id="video1" 
           src="./Video_Lmns_Encoded.mp4"
+          muted
           playsinline 
           loop 
           preload="auto" 
           crossorigin="anonymous"
           style="display: none"
         ></video>
+        <img id="play-icon" src="https://cdn-icons-png.flaticon.com/512/727/727245.png" />
+        <img id="pause-icon" src="https://cdn-icons-png.flaticon.com/512/727/727269.png" />
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-      <a-entity mindar-image-target="targetIndex: 0">
+      <a-entity mindar-image-target="targetIndex: 0; persistent: true">
+        <!-- Video -->
         <a-video 
+          id="ar-video" 
           src="#video1" 
           width="1" 
           height="0.65" 
           position="0 0 0"
         ></a-video>
+
+        <!-- Play/Pause Button (just below the video) -->
+        <a-image
+          id="playPauseBtn"
+          src="#play-icon"
+          position="0 -0.45 0"
+          width="0.15"
+          height="0.15"
+          class="clickable"
+        ></a-image>
       </a-entity>
     </a-scene>
+
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const video = document.getElementById("video1");
+        const target = document.querySelector('[mindar-image-target]');
+        const playPauseBtn = document.getElementById("playPauseBtn");
+
+        const playIcon = document.getElementById("play-icon").getAttribute("src");
+        const pauseIcon = document.getElementById("pause-icon").getAttribute("src");
+
+        // Play/Pause toggle in AR
+        playPauseBtn.addEventListener("click", () => {
+          if (video.paused) {
+            video.play();
+            playPauseBtn.setAttribute("src", pauseIcon);
+          } else {
+            video.pause();
+            playPauseBtn.setAttribute("src", playIcon);
+          }
+        });
+
+        // Auto-play fallback on user interaction (iOS)
+        document.body.addEventListener("click", () => {
+          if (video && video.paused) {
+            video.play().catch(() => {});
+          }
+        });
+
+        // Reset video and icon on marker lost
+        target.addEventListener("targetLost", () => {
+          video.pause();
+          video.currentTime = 0;
+          playPauseBtn.setAttribute("src", playIcon);
+        });
+
+        // Hide loading screen
+        const scene = document.querySelector('a-scene');
+        const loadingEl = document.getElementById('loading');
+        if (scene) {
+          scene.addEventListener('loaded', () => loadingEl.style.display = 'none');
+        }
+        setTimeout(() => {
+          loadingEl.style.display = 'none';
+        }, 10000);
+      });
+    </script>
   </body>
 </html>
