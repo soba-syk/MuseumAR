@@ -53,9 +53,6 @@
           crossorigin="anonymous"
           style="display: none"
         ></video>
-
-        <!-- <img id="pin-icon" src="./pin.png" />
-        <img id="close-icon" src="./close.png" /> -->
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
@@ -68,14 +65,6 @@
           height="0.65" 
           position="0 0 0"
         ></a-video>
-
-        <!-- <a-text
-          value="Tap the image to play video"
-          align="center"
-          width="1.8"
-          position="0 -0.5 0"
-          color="#ffffff"
-        ></a-text> -->
       </a-entity>
     </a-scene>
 
@@ -83,7 +72,6 @@
       document.addEventListener("DOMContentLoaded", () => {
         const video = document.getElementById("video1");
         const target = document.getElementById("marker");
-        // const arVideo = document.getElementById("ar-video");
 
         // Autoplay on target found
         target.addEventListener("targetFound", () => {
@@ -97,16 +85,10 @@
             video.currentTime = 0;
         });
 
-        // iOS fix
-        // document.body.addEventListener("click", () => {
-        //   video.muted = false;
-        //   video.play().catch(() => {});
-        // });
-
         // Hide loading
         const scene = document.querySelector('a-scene');
         const loadingEl = document.getElementById('loading');
-        scene.addEventListener('loaded', () => loadingEl.style.display = 'none');
+        // scene.addEventListener('loaded', () => loadingEl.style.display = 'none');
         setTimeout(() => loadingEl.style.display = 'none', 5000);
       });
     </script>
