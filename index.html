@@ -84,7 +84,7 @@
         <a-image
           id="pauseBtn"
           src="#pause-icon"
-          position="-0.2 0.15 0"
+          position="0.2 -0.5 0"
           width="0.15"
           height="0.15"
           class="clickable"
@@ -107,6 +107,7 @@
 
         // Pause video
         pauseBtn.addEventListener("click", () => {
+          video.muted = true;
           video.pause();
         });
 
