@@ -55,7 +55,6 @@
         ></video>
 
         <img id="play-icon" src="./play.png" />
-        <img id="pause-icon" src="./pause.png" />
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
@@ -74,17 +73,7 @@
         <a-image
           id="playBtn"
           src="#play-icon"
-          position="-0.15 -0.6 0"
-          width="0.15"
-          height="0.15"
-          class="clickable"
-        ></a-image>
-
-        <!-- Pause Button (Always Visible) -->
-        <a-image
-          id="pauseBtn"
-          src="#pause-icon"
-          position="0.25 -0.6 0"
+          position="0 -0.45 0"
           width="0.15"
           height="0.15"
           class="clickable"
@@ -96,20 +85,12 @@
       document.addEventListener("DOMContentLoaded", () => {
         const video = document.getElementById("video1");
         const playBtn = document.getElementById("playBtn");
-        const pauseBtn = document.getElementById("pauseBtn");
         const target = document.querySelector('[mindar-image-target]');
 
         // Play video and unmute
         playBtn.addEventListener("click", () => {
           video.muted = false;
           video.play().catch(() => {});
-        });
-
-        // Pause video
-        pauseBtn.addEventListener("click", () => {
-          video.pause();
-          // Only mute after pause is successful (optional)
-          setTimeout(() => { video.muted = true; }, 100);
         });
 
         // Stop and reset video on lost
