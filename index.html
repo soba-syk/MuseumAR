@@ -49,11 +49,11 @@
         <video 
           id="video1" 
           src="./Video_Lmns_Encoded.mp4"
-          muted
           playsinline 
           preload="auto" 
           crossorigin="anonymous"
-          style="display: none"
+          muted
+          style="display:none"
         ></video>
         <!-- Button icons -->
         <img id="play-icon" src="https://cdn-icons-png.flaticon.com/512/727/727245.png" />
@@ -116,13 +116,6 @@
           video.currentTime = 0;
           isPlaying = false;
           playPauseBtn.setAttribute("src", playIcon);
-        });
-
-        // Optional: if found and was playing before, resume
-        target.addEventListener("targetFound", () => {
-          if (isPlaying) {
-            video.play().catch(() => {});
-          }
         });
 
         // Fallback: iOS touch trigger
