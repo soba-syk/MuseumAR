@@ -34,7 +34,6 @@
   </head>
 
   <body>
-    <!-- Loading screen -->
     <div id="loading">Sobar jap AR nak bukak dah...</div>
 
     <a-scene 
@@ -52,18 +51,18 @@
           playsinline 
           preload="auto" 
           crossorigin="anonymous"
-          style="display:none"
+          style="display: none"
         ></video>
 
-        <!-- White Play and Pause icons -->
-        <img id="play-icon" src="./play.png" />
-        <img id="pause-icon" src="./pause.png" />
+        <!-- White icons for buttons -->
+        <img id="play-icon" src="https://cdn-icons-png.flaticon.com/512/0/375.png" />
+        <img id="pause-icon" src="https://cdn-icons-png.flaticon.com/512/0/463.png" />
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
       <a-entity mindar-image-target="targetIndex: 0">
-        <!-- Video -->
+        <!-- AR Video -->
         <a-video 
           id="ar-video" 
           src="#video1" 
@@ -72,14 +71,26 @@
           position="0 0 0"
         ></a-video>
 
-        <!-- Play/Pause Button (white icons) -->
+        <!-- Separate Play Button -->
         <a-image
-          id="playPauseBtn"
+          id="playBtn"
           src="#play-icon"
           position="0 -0.45 0"
           width="0.15"
           height="0.15"
           class="clickable"
+          visible="true"
+        ></a-image>
+
+        <!-- Separate Pause Button -->
+        <a-image
+          id="pauseBtn"
+          src="#pause-icon"
+          position="0 -0.45 0"
+          width="0.15"
+          height="0.15"
+          class="clickable"
+          visible="false"
         ></a-image>
       </a-entity>
     </a-scene>
@@ -87,51 +98,53 @@
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         const video = document.getElementById("video1");
+        const playBtn = document.getElementById("playBtn");
+        const pauseBtn = document.getElementById("pauseBtn");
         const target = document.querySelector('[mindar-image-target]');
-        const playPauseBtn = document.getElementById("playPauseBtn");
-
-        const playIcon = document.getElementById("play-icon").getAttribute("src");
-        const pauseIcon = document.getElementById("pause-icon").getAttribute("src");
 
         let isPlaying = false;
 
-        // Play/Pause toggle
-        playPauseBtn.addEventListener("click", () => {
-          if (video.paused || video.ended) {
-            video.muted = false; // allow audio
-            video.play().then(() => {
-              isPlaying = true;
-              playPauseBtn.setAttribute("src", pauseIcon);
-            }).catch(() => {});
-          } else {
-            video.pause();
-            isPlaying = false;
-            playPauseBtn.setAttribute("src", playIcon);
-          }
+        // Play button functionality
+        playBtn.addEventListener("click", () => {
+          video.muted = false;
+          video.play().then(() => {
+            isPlaying = true;
+            playBtn.setAttribute("visible", "false");
+            pauseBtn.setAttribute("visible", "true");
+          }).catch(() => {});
         });
 
-        // Reset on target lost
+        // Pause button functionality
+        pauseBtn.addEventListener("click", () => {
+          video.pause();
+          isPlaying = false;
+          playBtn.setAttribute("visible", "true");
+          pauseBtn.setAttribute("visible", "false");
+        });
+
+        // Pause and reset on marker lost
         target.addEventListener("targetLost", () => {
           video.pause();
           video.currentTime = 0;
           isPlaying = false;
-          playPauseBtn.setAttribute("src", playIcon);
+          playBtn.setAttribute("visible", "true");
+          pauseBtn.setAttribute("visible", "false");
         });
 
-        // Resume if was playing before
+        // Resume if previously playing
         target.addEventListener("targetFound", () => {
           if (isPlaying) {
             video.play().catch(() => {});
           }
         });
 
-        // iOS autoplay unlock
+        // Unlock autoplay for iOS
         document.body.addEventListener("click", () => {
           video.muted = false;
           video.play().catch(() => {});
         });
 
-        // Hide loading
+        // Hide loading screen after scene is ready
         const scene = document.querySelector('a-scene');
         const loadingEl = document.getElementById('loading');
         scene.addEventListener('loaded', () => loadingEl.style.display = 'none');
