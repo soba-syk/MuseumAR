@@ -79,7 +79,6 @@
           width="0.15"
           height="0.15"
           class="clickable"
-          visible="true"
         ></a-image>
 
         <!-- Separate Pause Button -->
@@ -90,7 +89,6 @@
           width="0.15"
           height="0.15"
           class="clickable"
-          visible="false"
         ></a-image>
       </a-entity>
     </a-scene>
@@ -109,8 +107,6 @@
           video.muted = false;
           video.play().then(() => {
             isPlaying = true;
-            playBtn.setAttribute("visible", "false");
-            pauseBtn.setAttribute("visible", "true");
           }).catch(() => {});
         });
 
@@ -118,8 +114,6 @@
         pauseBtn.addEventListener("click", () => {
           video.pause();
           isPlaying = false;
-          playBtn.setAttribute("visible", "true");
-          pauseBtn.setAttribute("visible", "false");
         });
 
         // Pause and reset on marker lost
@@ -127,8 +121,6 @@
           video.pause();
           video.currentTime = 0;
           isPlaying = false;
-          playBtn.setAttribute("visible", "true");
-          pauseBtn.setAttribute("visible", "false");
         });
 
         // Resume if previously playing
