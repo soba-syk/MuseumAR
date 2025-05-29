@@ -54,8 +54,8 @@
           style="display: none"
         ></video>
 
-        <img id="pin-icon" src="./pin.png" />
-        <img id="close-icon" src="./close.png" />
+        <!-- <img id="pin-icon" src="./pin.png" />
+        <img id="close-icon" src="./close.png" /> -->
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
@@ -69,33 +69,13 @@
           position="0 0 0"
         ></a-video>
 
-        <a-text
+        <!-- <a-text
           value="Tap the image to play video"
           align="center"
           width="1.8"
           position="0 -0.5 0"
           color="#ffffff"
-        ></a-text>
-
-        <!-- Pin Button -->
-        <a-image
-          id="pinBtn"
-          src="#pin-icon"
-          position="-0.4 -0.5 0"
-          width="0.12"
-          height="0.12"
-          class="clickable"
-        ></a-image>
-
-        <!-- Close Button -->
-        <a-image
-          id="closeBtn"
-          src="#close-icon"
-          position="0.4 -0.5 0"
-          width="0.12"
-          height="0.12"
-          class="clickable"
-        ></a-image>
+        ></a-text> -->
       </a-entity>
     </a-scene>
 
@@ -103,47 +83,25 @@
       document.addEventListener("DOMContentLoaded", () => {
         const video = document.getElementById("video1");
         const target = document.getElementById("marker");
-        const pinBtn = document.getElementById("pinBtn");
-        const closeBtn = document.getElementById("closeBtn");
-        const arVideo = document.getElementById("ar-video");
-
-        let isPinned = false;
-
-        // Pin button logic
-        pinBtn.addEventListener("click", () => {
-          isPinned = true;
-          video.muted = false;
-          video.play().catch(() => {});
-        });
-
-        // Close button logic
-        closeBtn.addEventListener("click", () => {
-          isPinned = false;
-          video.pause();
-          video.currentTime = 0;
-        });
+        // const arVideo = document.getElementById("ar-video");
 
         // Autoplay on target found
         target.addEventListener("targetFound", () => {
-          if (!isPinned) {
             video.muted = false;
             video.play().catch(() => {});
-          }
         });
 
         // Pause and reset on target lost (unless pinned)
         target.addEventListener("targetLost", () => {
-          if (!isPinned) {
             video.pause();
             video.currentTime = 0;
-          }
         });
 
         // iOS fix
-        document.body.addEventListener("click", () => {
-          video.muted = false;
-          video.play().catch(() => {});
-        });
+        // document.body.addEventListener("click", () => {
+        //   video.muted = false;
+        //   video.play().catch(() => {});
+        // });
 
         // Hide loading
         const scene = document.querySelector('a-scene');
