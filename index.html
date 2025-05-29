@@ -107,8 +107,9 @@
 
         // Pause video
         pauseBtn.addEventListener("click", () => {
-          video.muted = true;
           video.pause();
+          // Only mute after pause is successful (optional)
+          setTimeout(() => { video.muted = true; }, 100);
         });
 
         // Stop and reset video on lost
