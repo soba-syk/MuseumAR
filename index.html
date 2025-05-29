@@ -52,17 +52,16 @@
           playsinline 
           preload="auto" 
           crossorigin="anonymous"
-          muted
           style="display:none"
         ></video>
-        <!-- Button icons -->
-        <img id="play-icon" src="https://cdn-icons-png.flaticon.com/512/727/727245.png" />
-        <img id="pause-icon" src="https://cdn-icons-png.flaticon.com/512/727/727269.png" />
+
+        <!-- White Play and Pause icons -->
+        <img id="play-icon" src="https://cdn-icons-png.flaticon.com/512/0/375.png" />
+        <img id="pause-icon" src="https://cdn-icons-png.flaticon.com/512/0/463.png" />
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-      <!-- Target without persistent: true -->
       <a-entity mindar-image-target="targetIndex: 0">
         <!-- Video -->
         <a-video 
@@ -73,7 +72,7 @@
           position="0 0 0"
         ></a-video>
 
-        <!-- Play/Pause Button -->
+        <!-- Play/Pause Button (white icons) -->
         <a-image
           id="playPauseBtn"
           src="#play-icon"
@@ -96,9 +95,10 @@
 
         let isPlaying = false;
 
-        // Toggle button inside AR
+        // Play/Pause toggle
         playPauseBtn.addEventListener("click", () => {
           if (video.paused || video.ended) {
+            video.muted = false; // allow audio
             video.play().then(() => {
               isPlaying = true;
               playPauseBtn.setAttribute("src", pauseIcon);
@@ -110,7 +110,7 @@
           }
         });
 
-        // Pause & reset when image is lost
+        // Reset on target lost
         target.addEventListener("targetLost", () => {
           video.pause();
           video.currentTime = 0;
@@ -118,20 +118,24 @@
           playPauseBtn.setAttribute("src", playIcon);
         });
 
-        // Fallback: iOS touch trigger
-        document.body.addEventListener("click", () => {
-          if (video && video.paused) {
+        // Resume if was playing before
+        target.addEventListener("targetFound", () => {
+          if (isPlaying) {
             video.play().catch(() => {});
           }
         });
 
-        // Hide loading screen
+        // iOS autoplay unlock
+        document.body.addEventListener("click", () => {
+          video.muted = false;
+          video.play().catch(() => {});
+        });
+
+        // Hide loading
         const scene = document.querySelector('a-scene');
         const loadingEl = document.getElementById('loading');
         scene.addEventListener('loaded', () => loadingEl.style.display = 'none');
-        setTimeout(() => {
-          loadingEl.style.display = 'none';
-        }, 10000);
+        setTimeout(() => loadingEl.style.display = 'none', 10000);
       });
     </script>
   </body>
