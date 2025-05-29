@@ -74,7 +74,7 @@
         <a-image
           id="playBtn"
           src="#play-icon"
-          position="-0.25 -0.6 0"
+          position="-0.15 -0.6 0"
           width="0.15"
           height="0.15"
           class="clickable"
@@ -116,12 +116,6 @@
         target.addEventListener("targetLost", () => {
           video.pause();
           video.currentTime = 0;
-        });
-
-        // Optional: Touch anywhere on iOS to unlock audio
-        document.body.addEventListener("click", () => {
-          video.muted = false;
-          video.play().catch(() => {});
         });
 
         // Hide loading
