@@ -74,7 +74,7 @@
         <a-image
           id="playBtn"
           src="#play-icon"
-          position="-0.3 -0.6 0"
+          position="-0.25 -0.6 0"
           width="0.15"
           height="0.15"
           class="clickable"
@@ -84,7 +84,7 @@
         <a-image
           id="pauseBtn"
           src="#pause-icon"
-          position="0.3 -0.6 0"
+          position="0.25 -0.6 0"
           width="0.15"
           height="0.15"
           class="clickable"
@@ -102,13 +102,20 @@
         // Play video and unmute
         playBtn.addEventListener("click", () => {
           video.muted = false;
-          video.play().catch(() => {});
+          video.play().catch((err) => {
+            console.warn("Play error:", err);
+          });
         });
 
         // Pause video
         pauseBtn.addEventListener("click", () => {
-          video.muted = true;
-          video.pause();
+          try {
+            video.pause();
+            video.muted = true;
+            console.log("Video paused");
+          } catch (err) {
+            console.warn("Pause error:", err);
+          }
         });
 
         // Stop and reset video on lost
