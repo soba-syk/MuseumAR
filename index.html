@@ -102,20 +102,13 @@
         // Play video and unmute
         playBtn.addEventListener("click", () => {
           video.muted = false;
-          video.play().catch((err) => {
-            console.warn("Play error:", err);
-          });
+          video.play().catch(() => {});
         });
 
         // Pause video
         pauseBtn.addEventListener("click", () => {
-          try {
-            video.pause();
-            video.muted = true;
-            console.log("Video paused");
-          } catch (err) {
-            console.warn("Pause error:", err);
-          }
+          video.muted = true;
+          video.pause();
         });
 
         // Stop and reset video on lost
@@ -125,10 +118,10 @@
         });
 
         // Optional: Touch anywhere on iOS to unlock audio
-        document.body.addEventListener("click", () => {
-          video.muted = false;
-          video.play().catch(() => {});
-        });
+        // document.body.addEventListener("click", () => {
+        //   video.muted = false;
+        //   video.play().catch(() => {});
+        // });
 
         // Hide loading
         const scene = document.querySelector('a-scene');
