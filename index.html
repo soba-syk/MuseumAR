@@ -82,11 +82,10 @@
     <script>
       document.addEventListener("DOMContentLoaded", () => {
         const video = document.getElementById("video1");
-        const arVideo = document.getElementById("ar-video");
         const target = document.querySelector('[mindar-image-target]');
 
-        // Allow video play on tap
-        arVideo.addEventListener("click", () => {
+        // Optional: Touch anywhere on iOS to unlock audio
+        document.body.addEventListener("click", () => {
           video.muted = false;
           video.play().catch(() => {});
         });
