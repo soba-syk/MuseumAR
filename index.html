@@ -18,6 +18,28 @@
         left: 0;
       }
     </style>
+
+    <script>
+      // Fallback: manual video play on user interaction (needed on iOS sometimes)
+      document.addEventListener("click", () => {
+        const vid = document.getElementById("video1");
+        if (vid && vid.paused) {
+          vid.play().catch(err => console.warn("Autoplay failed:", err));
+        }
+      });
+
+      // Hide loading screen after scene is ready or 10s max
+      window.addEventListener('DOMContentLoaded', () => {
+        const scene = document.querySelector('a-scene');
+        const loadingEl = document.getElementById('loading');
+        if (scene) {
+          scene.addEventListener('loaded', () => loadingEl.style.display = 'none');
+        }
+        setTimeout(() => {
+          loadingEl.style.display = 'none';
+        }, 10000); // fallback
+      });
+    </script>
   </head>
 
   <body>
@@ -49,7 +71,6 @@
           id="video1" 
           src="./Video_Lmns_Encoded.mp4"
           autoplay 
-          muted
           playsinline 
           loop 
           preload="auto" 
@@ -60,7 +81,7 @@
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-      <a-entity mindar-image-target="targetIndex: 0; persistent: true">
+      <a-entity mindar-image-target="targetIndex: 0">
         <a-video 
           src="#video1" 
           width="1" 
