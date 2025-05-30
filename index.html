@@ -2,7 +2,7 @@
 <html>
   <head>
     <meta charset="utf-8" />
-    <title>Museum AR - Two Targets</title>
+    <title>Museum AR - Two Targets with Pin</title>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
@@ -28,35 +28,6 @@
         justify-content: center;
         font-size: 1.2rem;
         z-index: 9999;
-      }
-
-      .pinned-video-container {
-        position: fixed;
-        bottom: 20px;
-        left: 50%;
-        transform: translateX(-50%);
-        width: 90%;
-        max-width: 480px;
-        z-index: 10000;
-        display: none;
-        flex-direction: column;
-        align-items: flex-end;
-      }
-
-      .pinned-video-container video {
-        width: 100%;
-        border: 2px solid white;
-        border-radius: 8px;
-      }
-
-      .close-btn {
-        background: red;
-        color: white;
-        border: none;
-        border-radius: 4px;
-        padding: 5px 10px;
-        margin-top: 5px;
-        cursor: pointer;
       }
     </style>
   </head>
@@ -98,15 +69,8 @@
       document.addEventListener("DOMContentLoaded", () => {
         const video1 = document.getElementById("video1");
         const video2 = document.getElementById("video2");
-
-        const pinnedContainer1 = document.getElementById("pinnedContainer1");
-        const pinnedContainer2 = document.getElementById("pinnedContainer2");
-
         const marker1 = document.getElementById("marker1");
         const marker2 = document.getElementById("marker2");
-
-        const arVideo1 = document.getElementById("ar-video1");
-        const arVideo2 = document.getElementById("ar-video2");
 
         let pinned1 = false;
         let pinned2 = false;
@@ -125,10 +89,6 @@
           }
         });
 
-        document.getElementById("pinBtn1").addEventListener("click", () => {
-            video1.pause();
-        });
-
         marker2.addEventListener("targetFound", () => {
           if (!pinned2) {
             video2.muted = false;
@@ -143,13 +103,71 @@
           }
         });
 
-        document.getElementById("pinBtn2").addEventListener("click", () => {
-            video2.pause();
+        const createPinnedPlayer = (videoSrc, currentTime, which) => {
+          const pinnedVideo = document.createElement("video");
+          pinnedVideo.src = videoSrc;
+          pinnedVideo.currentTime = currentTime;
+          pinnedVideo.controls = true;
+          pinnedVideo.autoplay = true;
+          pinnedVideo.style.width = "100%";
+          pinnedVideo.style.borderRadius = "8px";
+          pinnedVideo.style.background = "black";
+
+          const container = document.createElement("div");
+          container.style.position = "fixed";
+          container.style.bottom = "20px";
+          container.style.left = "50%";
+          container.style.transform = "translateX(-50%)";
+          container.style.width = "90%";
+          container.style.maxWidth = "480px";
+          container.style.zIndex = "10000";
+          container.style.display = "flex";
+          container.style.flexDirection = "column";
+          container.style.alignItems = "flex-end";
+
+          const closeBtn = document.createElement("button");
+          closeBtn.textContent = "Close";
+          closeBtn.style.marginTop = "5px";
+          closeBtn.style.background = "red";
+          closeBtn.style.color = "white";
+          closeBtn.style.border = "none";
+          closeBtn.style.padding = "5px 10px";
+          closeBtn.style.borderRadius = "4px";
+          closeBtn.onclick = () => {
+            document.body.removeChild(container);
+            if (which === 1) pinned1 = false;
+            if (which === 2) pinned2 = false;
+          };
+
+          container.appendChild(pinnedVideo);
+          container.appendChild(closeBtn);
+          document.body.appendChild(container);
+        };
+
+        document.getElementById("pinBtn1").addEventListener("click", () => {
+          pinned1 = true;
+          createPinnedPlayer(video1.src, video1.currentTime, 1);
+          video1.pause();
         });
+
+        document.getElementById("pinBtn2").addEventListener("click", () => {
+          pinned2 = true;
+          createPinnedPlayer(video2.src, video2.currentTime, 2);
+          video2.pause();
+        });
+
+        // iOS autoplay unlock
+        const unlockHandler = () => {
+          video1.play().catch(() => {});
+          video2.play().catch(() => {});
+          video1.pause();
+          video2.pause();
+          document.body.removeEventListener("click", unlockHandler); // remove after first tap
+        };
+        document.body.addEventListener("click", unlockHandler);
 
         setTimeout(() => document.getElementById("loading").style.display = "none", 5000);
       });
     </script>
-
   </body>
 </html>
