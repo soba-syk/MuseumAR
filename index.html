@@ -17,7 +17,6 @@
       top: 0;
       left: 0;
     }
-
     #loading {
       position: fixed;
       top: 0; left: 0;
@@ -30,25 +29,40 @@
       z-index: 9999;
       font-size: 1.2rem;
     }
-
-    .fullscreen-btn {
+    #pinnedVideoContainer {
+      display: none;
+      position: fixed;
+      bottom: 20px;
+      left: 50%;
+      transform: translateX(-50%);
+      z-index: 9999;
+      background: black;
+      border: 2px solid white;
+    }
+    #pinnedVideoContainer video {
+      width: 300px;
+      height: auto;
+    }
+    #closeBtn {
       position: absolute;
-      top: 10px;
-      right: 10px;
-      z-index: 10000;
-      padding: 6px 12px;
-      font-size: 14px;
-      background: white;
+      top: 0;
+      right: 0;
+      background: red;
+      color: white;
       border: none;
-      border-radius: 4px;
+      padding: 5px;
       cursor: pointer;
+      z-index: 10000;
     }
   </style>
 </head>
 
 <body>
   <div id="loading">Sobar jap AR nak bukak dah...</div>
-  <button id="fullscreenBtn" class="fullscreen-btn">Fullscreen</button>
+  <div id="pinnedVideoContainer">
+    <button id="closeBtn">X</button>
+    <video id="pinnedVideo" playsinline autoplay muted></video>
+  </div>
 
   <a-scene
     mindar-image="imageTargetSrc: ./guaPelangi.mind"
@@ -56,8 +70,8 @@
     renderer="colorManagement: true, physicallyCorrectLights"
     embedded
     vr-mode-ui="enabled: false"
-    device-orientation-permission-ui="enabled: false"
-  >
+    device-orientation-permission-ui="enabled: false">
+
     <a-assets>
       <video id="video1" src="./Batukapur.mp4" playsinline preload="auto" crossorigin="anonymous" style="display: none"></video>
       <video id="video2" src="./Tapakkajian.mp4" playsinline preload="auto" crossorigin="anonymous" style="display: none"></video>
@@ -65,110 +79,88 @@
 
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-    <!-- Marker 1 -->
     <a-entity id="marker1" mindar-image-target="targetIndex: 0">
-      <a-entity id="videoWrap1" visible="false">
-        <a-video id="ar-video1" src="#video1" width="1" height="0.6" position="0 0 0"></a-video>
-        <a-text value="Batu Kapur @Gua Pelangi" position="0 -0.5 0" width="2" align="center" color="white"></a-text>
-        <a-image id="pinBtn1" src="pin.png" position="0.5 -0.4 0" width="0.15" height="0.15" class="clickable"></a-image>
-      </a-entity>
+      <a-video id="ar-video1" src="#video1" width="1" height="0.6" position="0 0 0"></a-video>
+      <a-text value="Batu Kapur @Gua Pelangi" position="0 -0.5 0" width="2" align="center" color="white"></a-text>
+      <a-image id="pinBtn1" src="pin.png" position="0.5 -0.4 0" width="0.15" height="0.15" class="clickable"></a-image>
     </a-entity>
 
-    <!-- Marker 2 -->
     <a-entity id="marker2" mindar-image-target="targetIndex: 1">
-      <a-entity id="videoWrap2" visible="false">
-        <a-video id="ar-video2" src="#video2" width="1" height="0.6" position="0 0 0"></a-video>
-        <a-text value="Tapak Kajian @Gua Pelangi" position="0 -0.5 0" width="2" align="center" color="white"></a-text>
-        <a-image id="pinBtn2" src="pin.png" position="0.5 -0.4 0" width="0.15" height="0.15" class="clickable"></a-image>
-      </a-entity>
+      <a-video id="ar-video2" src="#video2" width="1" height="0.6" position="0 0 0"></a-video>
+      <a-text value="Tapak Kajian @Gua Pelangi" position="0 -0.5 0" width="2" align="center" color="white"></a-text>
+      <a-image id="pinBtn2" src="pin.png" position="0.5 -0.4 0" width="0.15" height="0.15" class="clickable"></a-image>
     </a-entity>
   </a-scene>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
+      const pinnedContainer = document.getElementById("pinnedVideoContainer");
+      const pinnedVideo = document.getElementById("pinnedVideo");
+      const closeBtn = document.getElementById("closeBtn");
       const video1 = document.getElementById("video1");
       const video2 = document.getElementById("video2");
-
-      const marker1 = document.getElementById("marker1");
-      const marker2 = document.getElementById("marker2");
-
-      const wrap1 = document.getElementById("videoWrap1");
-      const wrap2 = document.getElementById("videoWrap2");
 
       const pinBtn1 = document.getElementById("pinBtn1");
       const pinBtn2 = document.getElementById("pinBtn2");
 
-      const fullscreenBtn = document.getElementById("fullscreenBtn");
+      const marker1 = document.getElementById("marker1");
+      const marker2 = document.getElementById("marker2");
 
-      let pinned1 = false;
-      let pinned2 = false;
+      let pinned = false;
 
-      // --- Marker 1 ---
       marker1.addEventListener("targetFound", () => {
-        wrap1.setAttribute("visible", true);
-        video1.muted = false;
-        video1.play().catch(() => {});
+        if (!pinned) {
+          video1.muted = false;
+          video1.play().catch(() => {});
+        }
       });
 
       marker1.addEventListener("targetLost", () => {
-        if (!pinned1) {
-          wrap1.setAttribute("visible", false);
+        if (!pinned) {
           video1.pause();
           video1.currentTime = 0;
+        }
+      });
+
+      marker2.addEventListener("targetFound", () => {
+        if (!pinned) {
+          video2.muted = false;
+          video2.play().catch(() => {});
+        }
+      });
+
+      marker2.addEventListener("targetLost", () => {
+        if (!pinned) {
+          video2.pause();
+          video2.currentTime = 0;
         }
       });
 
       pinBtn1.addEventListener("click", () => {
-        pinned1 = !pinned1;
-        alert(pinned1 ? "Pinned Video 1" : "Unpinned Video 1");
-        if (pinned1) {
-          wrap1.setAttribute("visible", true);
-        } else {
-          // If marker is lost, hide again
-          wrap1.setAttribute("visible", false);
-          video1.pause();
-          video1.currentTime = 0;
-        }
-      });
-
-      // --- Marker 2 ---
-      marker2.addEventListener("targetFound", () => {
-        wrap2.setAttribute("visible", true);
-        video2.muted = false;
-        video2.play().catch(() => {});
-      });
-
-      marker2.addEventListener("targetLost", () => {
-        if (!pinned2) {
-          wrap2.setAttribute("visible", false);
-          video2.pause();
-          video2.currentTime = 0;
-        }
+        pinned = true;
+        pinnedVideo.src = video1.src;
+        pinnedVideo.muted = false;
+        pinnedVideo.play();
+        pinnedContainer.style.display = "block";
+        video1.pause();
       });
 
       pinBtn2.addEventListener("click", () => {
-        pinned2 = !pinned2;
-        alert(pinned2 ? "Pinned Video 2" : "Unpinned Video 2");
-        if (pinned2) {
-          wrap2.setAttribute("visible", true);
-        } else {
-          // If marker is lost, hide again
-          wrap2.setAttribute("visible", false);
-          video2.pause();
-          video2.currentTime = 0;
-        }
+        pinned = true;
+        pinnedVideo.src = video2.src;
+        pinnedVideo.muted = false;
+        pinnedVideo.play();
+        pinnedContainer.style.display = "block";
+        video2.pause();
       });
 
-      fullscreenBtn.addEventListener("click", () => {
-        const v = !video1.paused ? video1 : !video2.paused ? video2 : null;
-        if (v) {
-          if (v.requestFullscreen) v.requestFullscreen();
-          else if (v.webkitRequestFullscreen) v.webkitRequestFullscreen();
-          else if (v.msRequestFullscreen) v.msRequestFullscreen();
-        }
+      closeBtn.addEventListener("click", () => {
+        pinned = false;
+        pinnedVideo.pause();
+        pinnedVideo.src = "";
+        pinnedContainer.style.display = "none";
       });
 
-      // Unlock iOS autoplay
       document.body.addEventListener("click", () => {
         video1.play().catch(() => {});
         video2.play().catch(() => {});
