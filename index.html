@@ -44,7 +44,7 @@
       device-orientation-permission-ui="enabled: false"
     >
       <a-assets>
-        <video id="video1" src="./Batukapur.mp4" playsinline preload="auto" crossorigin="anonymous" style="display:none;"></video>
+        <video id="video1" src="./Fansmu.mp4" playsinline preload="auto" crossorigin="anonymous" style="display:none;"></video>
         <video id="video2" src="./Tapakkajian.mp4" playsinline preload="auto" crossorigin="anonymous" style="display:none;"></video>
       </a-assets>
 
@@ -102,47 +102,6 @@
             video2.currentTime = 0;
           }
         });
-
-        const createPinnedPlayer = (videoSrc, currentTime, which) => {
-          const pinnedVideo = document.createElement("video");
-          pinnedVideo.src = videoSrc;
-          pinnedVideo.currentTime = currentTime;
-          pinnedVideo.controls = true;
-          pinnedVideo.autoplay = true;
-          pinnedVideo.style.width = "100%";
-          pinnedVideo.style.borderRadius = "8px";
-          pinnedVideo.style.background = "black";
-
-          const container = document.createElement("div");
-          container.style.position = "fixed";
-          container.style.bottom = "20px";
-          container.style.left = "50%";
-          container.style.transform = "translateX(-50%)";
-          container.style.width = "90%";
-          container.style.maxWidth = "480px";
-          container.style.zIndex = "10000";
-          container.style.display = "flex";
-          container.style.flexDirection = "column";
-          container.style.alignItems = "flex-end";
-
-          const closeBtn = document.createElement("button");
-          closeBtn.textContent = "Close";
-          closeBtn.style.marginTop = "5px";
-          closeBtn.style.background = "red";
-          closeBtn.style.color = "white";
-          closeBtn.style.border = "none";
-          closeBtn.style.padding = "5px 10px";
-          closeBtn.style.borderRadius = "4px";
-          closeBtn.onclick = () => {
-            document.body.removeChild(container);
-            if (which === 1) pinned1 = false;
-            if (which === 2) pinned2 = false;
-          };
-
-          container.appendChild(pinnedVideo);
-          container.appendChild(closeBtn);
-          document.body.appendChild(container);
-        };
 
         document.getElementById("pinBtn1").addEventListener("click", () => {
           pinned1 = true;
