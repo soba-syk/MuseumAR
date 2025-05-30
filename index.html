@@ -199,12 +199,10 @@
         };
 
         // iOS unlock
-        document.body.addEventListener("click", () => {
-          video1.play().catch(() => {});
-          video2.play().catch(() => {});
-          video1.pause();
-          video2.pause();
-        });
+        // document.body.addEventListener("click", () => {
+        //   video1.play().catch(() => {});
+        //   video2.play().catch(() => {});
+        // });
 
         setTimeout(() => document.getElementById("loading").style.display = "none", 5000);
       });
