@@ -91,14 +91,14 @@
 
       <!-- Marker 1 -->
       <a-entity id="marker1" mindar-image-target="targetIndex: 0">
-        <a-video id="ar-video1" src="#video1" width="1" height="0.6" position="0 0 0"></a-video>
+        <a-video id="ar-video1" src="#video1" width="1" height="0.65" position="0 0 0"></a-video>
         <a-text value="Batu Kapur @Gua Pelangi" position="0 -0.5 0" width="2" align="center" color="white"></a-text>
         <a-image id="pinBtn1" src="pin.png" position="0.5 -0.4 0" width="0.15" height="0.15" class="clickable"></a-image>
       </a-entity>
 
       <!-- Marker 2 -->
       <a-entity id="marker2" mindar-image-target="targetIndex: 1">
-        <a-video id="ar-video2" src="#video2" width="1" height="0.6" position="0 0 0"></a-video>
+        <a-video id="ar-video2" src="#video2" width="1" height="0.65" position="0 0 0"></a-video>
         <a-text value="Tapak Kajian @Gua Pelangi" position="0 -0.5 0" width="2" align="center" color="white"></a-text>
         <a-image id="pinBtn2" src="pin.png" position="0.5 -0.4 0" width="0.15" height="0.15" class="clickable"></a-image>
       </a-entity>
@@ -108,13 +108,15 @@
       document.addEventListener("DOMContentLoaded", () => {
         const video1 = document.getElementById("video1");
         const video2 = document.getElementById("video2");
-        const pinnedVideo1 = document.getElementById("pinnedVideo1");
-        const pinnedVideo2 = document.getElementById("pinnedVideo2");
+
         const pinnedContainer1 = document.getElementById("pinnedContainer1");
         const pinnedContainer2 = document.getElementById("pinnedContainer2");
 
         const marker1 = document.getElementById("marker1");
         const marker2 = document.getElementById("marker2");
+
+        const arVideo1 = document.getElementById("ar-video1");
+        const arVideo2 = document.getElementById("ar-video2");
 
         let pinned1 = false;
         let pinned2 = false;
@@ -147,38 +149,56 @@
           }
         });
 
-        // Pin video buttons
+        // Pin 1
         document.getElementById("pinBtn1").addEventListener("click", () => {
           pinned1 = true;
-          pinnedVideo1.src = video1.src;
-          pinnedContainer1.style.display = "flex";
-          pinnedVideo1.currentTime = video1.currentTime;
-          pinnedVideo1.play();
-          video1.pause();
+
+          const container = pinnedContainer1;
+          container.style.display = "flex";
+
+          // Detach video from AR and move to DOM
+          arVideo1.setAttribute("visible", false);
+          video1.style.display = "block";
+          container.insertBefore(video1, container.firstChild);
         });
 
+        // Pin 2
         document.getElementById("pinBtn2").addEventListener("click", () => {
           pinned2 = true;
-          pinnedVideo2.src = video2.src;
-          pinnedContainer2.style.display = "flex";
-          pinnedVideo2.currentTime = video2.currentTime;
-          pinnedVideo2.play();
-          video2.pause();
+
+          const container = pinnedContainer2;
+          container.style.display = "flex";
+
+          arVideo2.setAttribute("visible", false);
+          video2.style.display = "block";
+          container.insertBefore(video2, container.firstChild);
         });
 
+        // Close buttons
         window.closePinned = function (which) {
           if (which === 1) {
             pinned1 = false;
-            pinnedVideo1.pause();
             pinnedContainer1.style.display = "none";
+            video1.style.display = "none";
+
+            // Reattach to AR video source
+            arVideo1.setAttribute("visible", true);
+            document.querySelector("a-assets").appendChild(video1);
+            video1.pause();
+            video1.currentTime = 0;
           } else {
             pinned2 = false;
-            pinnedVideo2.pause();
             pinnedContainer2.style.display = "none";
+            video2.style.display = "none";
+
+            arVideo2.setAttribute("visible", true);
+            document.querySelector("a-assets").appendChild(video2);
+            video2.pause();
+            video2.currentTime = 0;
           }
         };
 
-        // Unlock audio on iOS
+        // iOS unlock
         document.body.addEventListener("click", () => {
           video1.play().catch(() => {});
           video2.play().catch(() => {});
@@ -189,5 +209,6 @@
         setTimeout(() => document.getElementById("loading").style.display = "none", 5000);
       });
     </script>
+
   </body>
 </html>
