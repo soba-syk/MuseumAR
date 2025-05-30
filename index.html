@@ -64,16 +64,6 @@
   <body>
     <div id="loading">Sobar jap AR nak bukak dah...</div>
 
-    <!-- Pinned video container -->
-    <div id="pinnedContainer1" class="pinned-video-container">
-      <video id="pinnedVideo1" muted playsinline></video>
-      <button class="close-btn" onclick="closePinned(1)">Close</button>
-    </div>
-    <div id="pinnedContainer2" class="pinned-video-container">
-      <video id="pinnedVideo2" muted playsinline></video>
-      <button class="close-btn" onclick="closePinned(2)">Close</button>
-    </div>
-
     <a-scene
       mindar-image="imageTargetSrc: ./guaPelangi.mind"
       color-space="sRGB"
@@ -103,6 +93,16 @@
         <a-image id="pinBtn2" src="pin.png" position="0.5 -0.4 0" width="0.15" height="0.15" class="clickable"></a-image>
       </a-entity>
     </a-scene>
+
+    <!-- Pinned video container -->
+    <div id="pinnedContainer1" class="pinned-video-container">
+      <video id="pinnedVideo1" muted playsinline></video>
+      <button class="close-btn" onclick="closePinned(1)">Close</button>
+    </div>
+    <div id="pinnedContainer2" class="pinned-video-container">
+      <video id="pinnedVideo2" muted playsinline></video>
+      <button class="close-btn" onclick="closePinned(2)">Close</button>
+    </div>
 
     <script>
       document.addEventListener("DOMContentLoaded", () => {
