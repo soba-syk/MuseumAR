@@ -13,7 +13,6 @@
         overflow: hidden;
         height: 100%;
         width: 100%;
-        background-color: black;
       }
 
       #loading {
@@ -33,30 +32,33 @@
 
       #pinned-container {
         position: fixed;
-        top: 50%;
-        left: 50%;
-        transform: translate(-50%, -50%);
-        z-index: 9999;
-        display: none;
+        bottom: 20px;
+        right: 20px;
+        z-index: 10000;
+        display: flex;
         flex-direction: column;
-        align-items: center;
-        background-color: rgba(0, 0, 0, 0.8);
-        padding: 10px;
-        border-radius: 12px;
+        align-items: flex-end;
       }
 
-      #pinned-video {
-        width: 90vw;
-        max-width: 600px;
-        border-radius: 12px;
-        box-shadow: 0 4px 12px rgba(0,0,0,0.4);
-      }
-
-      #pinned-label {
-        color: white;
+      .pinned-video-wrapper {
         margin-top: 10px;
+        background: black;
+        padding: 5px;
+        border-radius: 10px;
+        border: 2px solid white;
+        max-width: 300px;
+      }
+
+      .pinned-video-wrapper video {
+        width: 100%;
+        border-radius: 6px;
+      }
+
+      .pinned-label {
+        color: white;
+        font-size: 14px;
         text-align: center;
-        font-size: 1rem;
+        margin-top: 5px;
       }
     </style>
   </head>
@@ -64,18 +66,13 @@
   <body>
     <div id="loading">
       <div>
-        <p>Sobar jap, jom masuk ke alam Augmented Reality...(1)</p>
-        <p style="font-size: 1rem; margin-top: 1em; color: #ccc;">
-          Untuk pengguna iPhone, sila tap mana-mana pada skrin lepas loading untuk aktifkan video.
-        </p>
+        <p>Moh la poi alam Augmented Reality...(1)</p>
+        <p style="font-size: 1rem; margin-top: 1em; color: #ccc;">Untuk pengguna iPhone, sila tap mana-mana pada skrin lepas loading untuk aktifkan video.</p>
       </div>
     </div>
 
-    <!-- Fixed Pinned Video Container -->
-    <div id="pinned-container">
-      <video id="pinned-video" controls autoplay playsinline></video>
-      <div id="pinned-label"></div>
-    </div>
+    <!-- Container for pinned videos -->
+    <div id="pinned-container"></div>
 
     <a-scene
       mindar-image="imageTargetSrc: ./guaPelangi.mind"
@@ -114,10 +111,6 @@
         const marker1 = document.getElementById("marker1");
         const marker2 = document.getElementById("marker2");
 
-        const pinnedContainer = document.getElementById("pinned-container");
-        const pinnedVideo = document.getElementById("pinned-video");
-        const pinnedLabel = document.getElementById("pinned-label");
-
         let pinned1 = false;
         let pinned2 = false;
 
@@ -152,27 +145,18 @@
         document.getElementById("pinBtn1").addEventListener("click", () => {
           if (!pinned1) {
             pinned1 = true;
-            pinVideo(video1, "Batu Kapur @Gua Pelangi");
+            pinVideo(video1.src, video1.currentTime, "Batu Kapur @Gua Pelangi");
+            video1.pause();
           }
         });
 
         document.getElementById("pinBtn2").addEventListener("click", () => {
           if (!pinned2) {
             pinned2 = true;
-            pinVideo(video2, "Tapak Kajian @Gua Pelangi");
+            pinVideo(video2.src, video2.currentTime, "Tapak Kajian @Gua Pelangi");
+            video2.pause();
           }
         });
-
-        function pinVideo(videoSource, label) {
-          pinnedContainer.style.display = "flex";
-          pinnedLabel.textContent = label;
-
-          pinnedVideo.src = videoSource.src;
-          pinnedVideo.currentTime = videoSource.currentTime;
-          pinnedVideo.muted = false;
-          pinnedVideo.play().catch(e => console.warn("Autoplay blocked:", e));
-          videoSource.pause();
-        }
 
         // iOS autoplay unlock
         const unlockHandler = () => {
@@ -184,7 +168,6 @@
         };
         document.body.addEventListener("click", unlockHandler);
 
-        // Hide loading screen
         setTimeout(() => document.getElementById("loading").style.display = "none", 5000);
       });
     </script>
