@@ -35,7 +35,7 @@
   <body>
     <div id="loading">
       <div>
-        <p>Sobar jap AR nak bukak dah...</p>
+        <p>Sobar jap AR nak bukak dah...(1)</p>
         <p style="font-size: 1rem; margin-top: 1em; color: #ccc;">Untuk pengguna iPhone, sila tap mana-mana pada skrin lepas loading untuk aktifkan video.</p>
       </div>
     </div>
@@ -59,14 +59,12 @@
       <a-entity id="marker1" mindar-image-target="targetIndex: 0">
         <a-video id="ar-video1" src="#video1" width="1" height="0.65" position="0 0 0"></a-video>
         <a-text value="Batu Kapur @Gua Pelangi" position="0 -0.5 0" width="2" align="center" color="white"></a-text>
-        <!-- <a-image id="pinBtn1" src="pin.png" position="0.5 -0.4 0" width="0.15" height="0.15" class="clickable"></a-image> -->
       </a-entity>
 
       <!-- Marker 2 -->
       <a-entity id="marker2" mindar-image-target="targetIndex: 1">
         <a-video id="ar-video2" src="#video2" width="1" height="0.65" position="0 0 0"></a-video>
         <a-text value="Tapak Kajian @Gua Pelangi" position="0 -0.5 0" width="2" align="center" color="white"></a-text>
-        <!-- <a-image id="pinBtn2" src="pin.png" position="0.5 -0.4 0" width="0.15" height="0.15" class="clickable"></a-image> -->
       </a-entity>
     </a-scene>
 
@@ -77,48 +75,25 @@
         const marker1 = document.getElementById("marker1");
         const marker2 = document.getElementById("marker2");
 
-        let pinned1 = false;
-        let pinned2 = false;
-
         marker1.addEventListener("targetFound", () => {
-          if (!pinned1) {
             video1.muted = false;
             video1.play().catch(() => {});
-          }
         });
 
         marker1.addEventListener("targetLost", () => {
-          if (!pinned1) {
             video1.pause();
             video1.currentTime = 0;
-          }
         });
 
         marker2.addEventListener("targetFound", () => {
-          if (!pinned2) {
             video2.muted = false;
             video2.play().catch(() => {});
-          }
         });
 
         marker2.addEventListener("targetLost", () => {
-          if (!pinned2) {
             video2.pause();
             video2.currentTime = 0;
-          }
         });
-
-        /*document.getElementById("pinBtn1").addEventListener("click", () => {
-          pinned1 = true;
-          createPinnedPlayer(video1.src, video1.currentTime, 1);
-          video1.pause();
-        });
-
-        document.getElementById("pinBtn2").addEventListener("click", () => {
-          pinned2 = true;
-          createPinnedPlayer(video2.src, video2.currentTime, 2);
-          video2.pause();
-        });*/
 
         // iOS autoplay unlock
         const unlockHandler = () => {
