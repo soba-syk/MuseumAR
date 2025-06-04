@@ -32,21 +32,22 @@
 
       #pinned-container {
         position: fixed;
-        bottom: 20px;
-        right: 20px;
+        top: 50%;
+        left: 50%;
+        transform: translate(-50%, -50%);
         z-index: 10000;
         display: flex;
         flex-direction: column;
-        align-items: flex-end;
+        align-items: center;
+        justify-content: center;
       }
 
       .pinned-video-wrapper {
-        margin-top: 10px;
         background: black;
         padding: 5px;
         border-radius: 10px;
         border: 2px solid white;
-        max-width: 300px;
+        max-width: 80vw;
       }
 
       .pinned-video-wrapper video {
@@ -157,6 +158,30 @@
             video2.pause();
           }
         });
+
+        function pinVideo(src, startTime, label) {
+          // Clear any previous pinned video (optional)
+          pinnedContainer.innerHTML = "";
+
+          const wrapper = document.createElement("div");
+          wrapper.className = "pinned-video-wrapper";
+
+          const video = document.createElement("video");
+          video.src = src;
+          video.currentTime = startTime;
+          video.controls = true;
+          video.autoplay = true;
+          video.playsInline = true;
+          video.muted = false;
+
+          const labelDiv = document.createElement("div");
+          labelDiv.className = "pinned-label";
+          labelDiv.textContent = label;
+
+          wrapper.appendChild(video);
+          wrapper.appendChild(labelDiv);
+          pinnedContainer.appendChild(wrapper);
+        }
 
         // iOS autoplay unlock
         const unlockHandler = () => {
