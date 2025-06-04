@@ -132,11 +132,13 @@
 
       // Pin Btn 1
       pinBtn1.addEventListener("click", () => {
+        video1.muted = false;
         video1.play().catch(() => {});
       });
 
       // Pin Btn 2
       pinBtn2.addEventListener("click", () => {
+        video2.muted = false;
         video2.play().catch(() => {});
       });
 
