@@ -166,12 +166,18 @@
 
           const video = document.createElement("video");
           video.src = src;
-          video.currentTime = startTime;
           video.controls = true;
-          video.autoplay = true;
           video.muted = false;
+          video.autoplay = false;
           video.playsInline = true;
           video.setAttribute("crossorigin", "anonymous");
+
+          video.addEventListener("loadedmetadata", () => {
+            video.currentTime = startTime || 0;
+            video.play().catch((e) => {
+              console.warn("Video play blocked:", e);
+            });
+          });
 
           const label = document.createElement("div");
           label.className = "pinned-label";
