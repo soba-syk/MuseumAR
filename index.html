@@ -35,7 +35,7 @@
   <body>
     <div id="loading">
       <div>
-        <p>Sobar jap AR nak bukak dah...(1)</p>
+        <p>Sobar jap AR nak bukak dah...(3)</p>
         <p style="font-size: 1rem; margin-top: 1em; color: #ccc;">Untuk pengguna iPhone, sila tap mana-mana pada skrin lepas loading untuk aktifkan video.</p>
       </div>
     </div>
@@ -54,6 +54,12 @@
       </a-assets>
 
       <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
+
+      <a-entity camera look-controls>
+        <a-entity position="0 0 -2">
+          <a-text value="Museum AR Testing" color="yellow" width="4" align="center"></a-text>
+        </a-entity>
+      </a-entity>
 
       <!-- Marker 1 -->
       <a-entity id="marker1" mindar-image-target="targetIndex: 0">
