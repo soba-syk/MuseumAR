@@ -29,6 +29,24 @@
       font-size: 1.2rem;
       z-index: 9999;
     }
+
+    #video-overlay {
+      display: none;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: black;
+      z-index: 10000;
+      justify-content: center;
+      align-items: center;
+    }
+
+    #fullscreen-video {
+      max-width: 100%;
+      max-height: 100%;
+    }
   </style>
 </head>
 
@@ -40,6 +58,11 @@
         Untuk pengguna iPhone, sila tap mana-mana pada skrin lepas loading untuk aktifkan video.
       </p>
     </div>
+  </div>
+
+  <!-- Fullscreen Video Overlay -->
+  <div id="video-overlay">
+    <video id="fullscreen-video" controls playsinline></video>
   </div>
 
   <a-scene
@@ -81,6 +104,10 @@
       const pinVid1 = document.getElementById("pinBtn1");
       const pinVid2 = document.getElementById("pinBtn2");
 
+      const videoOverlay = document.getElementById("video-overlay");
+      const fullscreenVideo = document.getElementById("fullscreen-video");
+
+      // Play video inside AR scene when marker detected
       marker1.addEventListener("targetFound", () => {
           video1.muted = false;
           video1.play().catch(() => {});
@@ -101,16 +128,30 @@
           video2.currentTime = 0;
       });
 
-      // Pin Btn 1
-      pinBtn1.addEventListener("click", () => {
-        video1.muted = false;
-        video1.play().catch(() => {});
+      // Play fullscreen video overlay
+      function playFullscreen(videoSrc) {
+        fullscreenVideo.src = videoSrc;
+        fullscreenVideo.muted = false;
+        fullscreenVideo.play().catch(() => {});
+        videoOverlay.style.display = "flex";
+      }
+
+      // Pin button 1
+      pinVid1.addEventListener("click", () => {
+        playFullscreen("./Batukapur.mp4");
       });
 
-      // Pin Btn 2
-      pinBtn2.addEventListener("click", () => {
-        video2.muted = false;
-        video2.play().catch(() => {});
+      // Pin button 2
+      pinVid2.addEventListener("click", () => {
+        playFullscreen("./Tapakkajian.mp4");
+      });
+
+      // Close overlay on click
+      videoOverlay.addEventListener("click", () => {
+        fullscreenVideo.pause();
+        fullscreenVideo.currentTime = 0;
+        fullscreenVideo.src = "";
+        videoOverlay.style.display = "none";
       });
 
       // iOS autoplay unlock
@@ -123,6 +164,7 @@
       };
       document.body.addEventListener("click", unlockHandler);
 
+      // Hide loading after a few seconds
       setTimeout(() => document.getElementById("loading").style.display = "none", 5000);
     });
   </script>
