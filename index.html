@@ -30,22 +30,33 @@
       z-index: 9999;
     }
 
-    #video-overlay {
+    .video-overlay {
       display: none;
       position: fixed;
-      top: 0;
-      left: 0;
-      width: 100%;
-      height: 100%;
+      top: 10%;
+      width: 45%;
+      height: auto;
       background: black;
       z-index: 10000;
       justify-content: center;
       align-items: center;
+      padding: 10px;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(255,255,255,0.3);
     }
 
-    #fullscreen-video {
+    #video-overlay1 {
+      left: 5%;
+    }
+
+    #video-overlay2 {
+      right: 5%;
+    }
+
+    video {
       max-width: 100%;
-      max-height: 100%;
+      max-height: 80vh;
+      border-radius: 10px;
     }
   </style>
 </head>
@@ -53,16 +64,20 @@
 <body>
   <div id="loading">
     <div>
-      <p>Moh la poi alam Augmented Reality...(10)</p>
+      <p>Moh la poi alam Augmented Reality...(2)</p>
       <p style="font-size: 1rem; margin-top: 1em; color: #ccc;">
         Untuk pengguna iPhone, sila tap mana-mana pada skrin lepas loading untuk aktifkan video.
       </p>
     </div>
   </div>
 
-  <!-- Fullscreen Video Overlay -->
-  <div id="video-overlay">
-    <video id="fullscreen-video" controls playsinline></video>
+  <!-- Independent Video Overlays -->
+  <div id="video-overlay1" class="video-overlay">
+    <video id="fullscreen-video1" controls playsinline></video>
+  </div>
+
+  <div id="video-overlay2" class="video-overlay">
+    <video id="fullscreen-video2" controls playsinline></video>
   </div>
 
   <a-scene
@@ -104,54 +119,61 @@
       const pinVid1 = document.getElementById("pinBtn1");
       const pinVid2 = document.getElementById("pinBtn2");
 
-      const videoOverlay = document.getElementById("video-overlay");
-      const fullscreenVideo = document.getElementById("fullscreen-video");
+      const videoOverlay1 = document.getElementById("video-overlay1");
+      const videoOverlay2 = document.getElementById("video-overlay2");
+      const fullscreenVideo1 = document.getElementById("fullscreen-video1");
+      const fullscreenVideo2 = document.getElementById("fullscreen-video2");
 
-      // Play video inside AR scene when marker detected
+      // AR marker video playback (stops when marker is lost)
       marker1.addEventListener("targetFound", () => {
-          video1.muted = false;
-          video1.play().catch(() => {});
+        video1.muted = false;
+        video1.play().catch(() => {});
       });
 
       marker1.addEventListener("targetLost", () => {
-          video1.pause();
-          video1.currentTime = 0;
+        video1.pause();
+        video1.currentTime = 0;
       });
 
       marker2.addEventListener("targetFound", () => {
-          video2.muted = false;
-          video2.play().catch(() => {});
+        video2.muted = false;
+        video2.play().catch(() => {});
       });
 
       marker2.addEventListener("targetLost", () => {
-          video2.pause();
-          video2.currentTime = 0;
+        video2.pause();
+        video2.currentTime = 0;
       });
 
-      // Play fullscreen video overlay
-      function playFullscreen(videoSrc) {
-        fullscreenVideo.src = videoSrc;
-        fullscreenVideo.muted = false;
-        fullscreenVideo.play().catch(() => {});
-        videoOverlay.style.display = "flex";
-      }
-
-      // Pin button 1
+      // Pin Video 1
       pinVid1.addEventListener("click", () => {
-        playFullscreen("./Batukapur.mp4");
+        fullscreenVideo1.src = "./Batukapur.mp4";
+        fullscreenVideo1.muted = false;
+        fullscreenVideo1.play().catch(() => {});
+        videoOverlay1.style.display = "flex";
       });
 
-      // Pin button 2
+      // Pin Video 2
       pinVid2.addEventListener("click", () => {
-        playFullscreen("./Tapakkajian.mp4");
+        fullscreenVideo2.src = "./Tapakkajian.mp4";
+        fullscreenVideo2.muted = false;
+        fullscreenVideo2.play().catch(() => {});
+        videoOverlay2.style.display = "flex";
       });
 
-      // Close overlay on click
-      videoOverlay.addEventListener("click", () => {
-        fullscreenVideo.pause();
-        fullscreenVideo.currentTime = 0;
-        fullscreenVideo.src = "";
-        videoOverlay.style.display = "none";
+      // Hide overlays on tap
+      videoOverlay1.addEventListener("click", () => {
+        fullscreenVideo1.pause();
+        fullscreenVideo1.currentTime = 0;
+        fullscreenVideo1.src = "";
+        videoOverlay1.style.display = "none";
+      });
+
+      videoOverlay2.addEventListener("click", () => {
+        fullscreenVideo2.pause();
+        fullscreenVideo2.currentTime = 0;
+        fullscreenVideo2.src = "";
+        videoOverlay2.style.display = "none";
       });
 
       // iOS autoplay unlock
@@ -164,7 +186,7 @@
       };
       document.body.addEventListener("click", unlockHandler);
 
-      // Hide loading after a few seconds
+      // Hide loading screen after 5 seconds
       setTimeout(() => document.getElementById("loading").style.display = "none", 5000);
     });
   </script>
