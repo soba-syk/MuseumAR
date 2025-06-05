@@ -29,7 +29,7 @@
       font-size: 1.2rem;
       z-index: 9999;
     }
-
+/*
     .video-overlay {
       display: none;
       position: fixed;
@@ -57,14 +57,14 @@
       max-width: 100%;
       max-height: 80vh;
       border-radius: 10px;
-    }
+    }*/
   </style>
 </head>
 
 <body>
   <div id="loading">
     <div>
-      <p>Moh la poi alam Augmented Reality...(11)</p>
+      <p>Moh la poi alam Augmented Reality...(12)</p>
       <p style="font-size: 1rem; margin-top: 1em; color: #ccc;">
         Untuk pengguna iPhone, sila tap mana-mana pada skrin lepas loading untuk aktifkan video.
       </p>
@@ -81,7 +81,7 @@
   </div>
 
   <a-scene
-    mindar-image="imageTargetSrc: ./guaPelangi.mind"
+    mindar-image="imageTargetSrc: ./guaPelangi.mind; maxTrack: 2"
     color-space="sRGB"
     renderer="colorManagement: true, physicallyCorrectLights"
     embedded
@@ -110,7 +110,7 @@
     </a-entity>
   </a-scene>
 
-  <script>
+  <!-- <script>
     document.addEventListener("DOMContentLoaded", () => {
       const video1 = document.getElementById("video1");
       const video2 = document.getElementById("video2");
@@ -189,6 +189,6 @@
       // Hide loading screen after 5 seconds
       setTimeout(() => document.getElementById("loading").style.display = "none", 5000);
     });
-  </script>
+  </script> -->
 </body>
 </html>
