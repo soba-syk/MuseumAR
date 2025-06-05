@@ -3,9 +3,14 @@
 <head>
   <meta charset="utf-8" />
   <title>Museum AR Testing</title>
-  <meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <!-- Viewport for full screen, safe area, and proper scaling on all devices -->
+  <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
+
+  <!-- A-Frame & MindAR -->
   <script src="https://aframe.io/releases/1.6.0/aframe.min.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/mind-ar@1.2.5/dist/mindar-image-aframe.prod.js"></script>
+
   <style>
     html, body {
       margin: 0;
@@ -13,14 +18,17 @@
       overflow: hidden;
       height: 100%;
       width: 100%;
+      position: relative;
+      font-family: sans-serif;
+      box-sizing: border-box;
     }
 
     #loading {
       position: fixed;
       top: 0;
       left: 0;
-      width: 100%;
-      height: 100%;
+      width: 100vw;
+      height: 100vh;
       background: black;
       color: white;
       display: flex;
@@ -28,22 +36,27 @@
       justify-content: center;
       font-size: 1.2rem;
       z-index: 9999;
+      padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
     }
 
-    /* Fixed screen UI buttons */
+    /* Fixed screen UI buttons - responsive and safe area aware */
     #screen-buttons {
       position: fixed;
-      bottom: 30px;
+      bottom: calc(env(safe-area-inset-bottom, 0) + 24px);
       left: 50%;
       transform: translateX(-50%);
       display: flex;
       gap: 16px;
       z-index: 10000;
+      padding: 8px;
+      box-sizing: border-box;
     }
 
     .control-btn {
-      width: 60px;
-      height: 60px;
+      width: 14vw;
+      height: 14vw;
+      max-width: 64px;
+      max-height: 64px;
       background-size: contain;
       background-repeat: no-repeat;
       background-position: center;
@@ -76,11 +89,14 @@
       border: 2px solid white;
       border-radius: 12px;
       overflow: hidden;
+      max-width: 90vw;
+      max-height: 70vh;
     }
 
     #pinned-video {
-      width: 80vw;
+      width: 100%;
       height: auto;
+      display: block;
     }
 
     #close-pin-btn {
