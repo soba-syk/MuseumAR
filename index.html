@@ -67,23 +67,21 @@
 </head>
 
 <body>
-  <!-- Loading screen -->
   <div id="loading">
     <div>
-      <p>Moh la poi alam Augmented Reality...(1)</p>
+      <p>Moh la poi alam Augmented Reality...</p>
       <p style="font-size: 1rem; margin-top: 1em; color: #ccc;">
         Untuk pengguna iPhone, sila tap mana-mana pada skrin lepas loading untuk aktifkan video.
       </p>
     </div>
   </div>
 
-  <!-- Static screen buttons (outside of AR scene and loading) -->
+  <!-- Static Buttons -->
   <div id="screen-buttons">
     <div id="playButton" class="control-btn"></div>
     <div id="pinButton" class="control-btn"></div>
   </div>
 
-  <!-- AR Scene -->
   <a-scene
     mindar-image="imageTargetSrc: ./guaPelangi.mind"
     color-space="sRGB"
@@ -99,11 +97,13 @@
 
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
+    <!-- Marker 1 -->
     <a-entity id="marker1" mindar-image-target="targetIndex: 0">
       <a-video id="ar-video1" src="#video1" width="1" height="0.65" position="0 0 0"></a-video>
       <a-text value="Batu Kapur @Gua Pelangi" position="0 -0.5 0" width="2" align="center" color="white"></a-text>
     </a-entity>
 
+    <!-- Marker 2 -->
     <a-entity id="marker2" mindar-image-target="targetIndex: 1">
       <a-video id="ar-video2" src="#video2" width="1" height="0.65" position="0 0 0"></a-video>
       <a-text value="Tapak Kajian @Gua Pelangi" position="0 -0.5 0" width="2" align="center" color="white"></a-text>
@@ -117,56 +117,71 @@
       const marker1 = document.getElementById("marker1");
       const marker2 = document.getElementById("marker2");
 
+      const playButton = document.getElementById("playButton");
+      const pinButton = document.getElementById("pinButton");
+
+      let video1Pinned = false;
+      let video2Pinned = false;
       let currentVisibleMarker = null;
 
-      // Marker 1 tracking
       marker1.addEventListener("targetFound", () => {
-        currentVisibleMarker = "marker1";
         video1.muted = false;
         video1.play().catch(() => {});
+        currentVisibleMarker = "marker1";
       });
 
       marker1.addEventListener("targetLost", () => {
+        if (!video1Pinned) {
+          video1.pause();
+          video1.currentTime = 0;
+        }
         currentVisibleMarker = null;
-        video1.pause();
-        video1.currentTime = 0;
       });
 
-      // Marker 2 tracking
       marker2.addEventListener("targetFound", () => {
-        currentVisibleMarker = "marker2";
         video2.muted = false;
         video2.play().catch(() => {});
+        currentVisibleMarker = "marker2";
       });
 
       marker2.addEventListener("targetLost", () => {
+        if (!video2Pinned) {
+          video2.pause();
+          video2.currentTime = 0;
+        }
         currentVisibleMarker = null;
-        video2.pause();
-        video2.currentTime = 0;
       });
 
-      // Play button logic based on visible marker
-      const playButton = document.getElementById("playButton");
+      // Play/Pause toggle button
       playButton.addEventListener("click", () => {
         if (currentVisibleMarker === "marker1") {
           if (video1.paused) {
-            video1.play().catch(() => {});
+            video1.play();
           } else {
             video1.pause();
           }
         } else if (currentVisibleMarker === "marker2") {
           if (video2.paused) {
-            video2.play().catch(() => {});
+            video2.play();
           } else {
             video2.pause();
           }
         }
       });
 
-      // Hide loading screen
-      setTimeout(() => {
-        document.getElementById("loading").style.display = "none";
-      }, 5000);
+      // Pin toggle button
+      pinButton.addEventListener("click", () => {
+        if (currentVisibleMarker === "marker1") {
+          video1Pinned = !video1Pinned;
+          console.log("Video 1 pinned:", video1Pinned);
+        } else if (currentVisibleMarker === "marker2") {
+          video2Pinned = !video2Pinned;
+          console.log("Video 2 pinned:", video2Pinned);
+        }
+      });
+
+      // Hide loading after startup
+      setTimeout(() => document.getElementById("loading").style.display = "none", 5000);
     });
   </script>
 </body>
