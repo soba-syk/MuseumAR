@@ -29,6 +29,39 @@
       font-size: 1.2rem;
       z-index: 9999;
     }
+
+    #overlay-controls {
+      position: fixed;
+      bottom: 30px;
+      left: 50%;
+      transform: translateX(-50%);
+      display: flex;
+      gap: 16px;
+      z-index: 10000;
+    }
+
+    .control-btn {
+      width: 60px;
+      height: 60px;
+      background-size: contain;
+      background-repeat: no-repeat;
+      background-position: center;
+      cursor: pointer;
+      opacity: 0.9;
+      transition: transform 0.2s;
+    }
+
+    .control-btn:hover {
+      transform: scale(1.1);
+    }
+
+    #playButton {
+      background-image: url('play.png');
+    }
+
+    #pinButton {
+      background-image: url('pin.png');
+    }
   </style>
 </head>
 
@@ -40,6 +73,12 @@
         Untuk pengguna iPhone, sila tap mana-mana pada skrin lepas loading untuk aktifkan video.
       </p>
     </div>
+  </div>
+
+  <!-- Image-based Play & Pin Buttons -->
+  <div id="overlay-controls">
+    <div id="playButton" class="control-btn"></div>
+    <div id="pinButton" class="control-btn"></div>
   </div>
 
   <a-scene
@@ -96,16 +135,6 @@
           video2.pause();
           video2.currentTime = 0;
       });
-
-      // iOS autoplay unlock
-      /*const unlockHandler = () => {
-        video1.play().catch(() => {});
-        video2.play().catch(() => {});
-        video1.pause();
-        video2.pause();
-        document.body.removeEventListener("click", unlockHandler);
-      };
-      document.body.addEventListener("click", unlockHandler);*/
 
       setTimeout(() => document.getElementById("loading").style.display = "none", 5000);
     });
