@@ -76,12 +76,6 @@
     </div>
   </div>
 
-  <!-- ✅ Keep this outside a-scene so it stays visible -->
-  <div id="overlay-controls">
-    <div id="playButton" class="control-btn"></div>
-    <div id="pinButton" class="control-btn"></div>
-  </div>
-
   <a-scene
     mindar-image="imageTargetSrc: ./guaPelangi.mind"
     color-space="sRGB"
@@ -109,6 +103,12 @@
       <a-text value="Tapak Kajian @Gua Pelangi" position="0 -0.5 0" width="2" align="center" color="white"></a-text>
     </a-entity>
   </a-scene>
+
+  <!-- ✅ Keep this outside a-scene so it stays visible -->
+  <div id="overlay-controls">
+    <div id="playButton" class="control-btn"></div>
+    <div id="pinButton" class="control-btn"></div>
+  </div>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
