@@ -35,7 +35,7 @@
 <body>
   <div id="loading">
     <div>
-      <p>Moh la poi alam Augmented Reality...(3)</p>
+      <p>Moh la poi alam Augmented Reality...(4)</p>
       <p style="font-size: 1rem; margin-top: 1em; color: #ccc;">
         Untuk pengguna iPhone, sila tap mana-mana pada skrin lepas loading untuk aktifkan video.
       </p>
@@ -59,28 +59,27 @@
       <img id="pin-icon" src="pin.png" />
     </a-assets>
 
-    <a-camera position="0 0 0" look-controls="enabled: false">
-      <!-- Play Button in AR scene -->
-      <a-image 
-        id="playButtonAR" 
-        src="#play-icon" 
-        width="0.2" 
-        height="0.2" 
-        position="0.35 -0.2 0.01" 
-        class="clickable">
-      </a-image>
+    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-      <!-- Pin Button in AR scene -->
-      <a-image 
-        id="pinButtonAR" 
-        src="#pin-icon" 
-        width="0.2" 
-        height="0.2" 
-        position="-0.35 -0.2 0.01" 
-        class="clickable">
-      </a-image>
+    <!-- Play Button in AR scene -->
+    <a-image 
+      id="playButtonAR" 
+      src="#play-icon" 
+      width="0.2" 
+      height="0.2" 
+      position="0.35 -0.2 0.01" 
+      class="clickable">
+    </a-image>
 
-    </a-camera>
+    <!-- Pin Button in AR scene -->
+    <a-image 
+      id="pinButtonAR" 
+      src="#pin-icon" 
+      width="0.2" 
+      height="0.2" 
+      position="-0.35 -0.2 0.01" 
+      class="clickable">
+    </a-image>
 
     <!-- Marker 1 with AR video and static buttons -->
     <a-entity id="marker1" mindar-image-target="targetIndex: 0">
