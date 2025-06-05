@@ -35,7 +35,7 @@
 <body>
   <div id="loading">
     <div>
-      <p>Moh la poi alam Augmented Reality...(2)</p>
+      <p>Moh la poi alam Augmented Reality...(3)</p>
       <p style="font-size: 1rem; margin-top: 1em; color: #ccc;">
         Untuk pengguna iPhone, sila tap mana-mana pada skrin lepas loading untuk aktifkan video.
       </p>
@@ -59,21 +59,8 @@
       <img id="pin-icon" src="pin.png" />
     </a-assets>
 
-    <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
-
-    <!-- Marker 1 with AR video and static buttons -->
-    <a-entity id="marker1" mindar-image-target="targetIndex: 0">
-      <a-video id="ar-video1" src="#video1" width="1" height="0.65" position="0 0 0"></a-video>
-      <a-text value="Batu Kapur @Gua Pelangi" position="0 -0.5 0" width="2" align="center" color="white"></a-text>
-    </a-entity>
-
-    <!-- Marker 2 remains basic -->
-    <a-entity id="marker2" mindar-image-target="targetIndex: 1">
-      <a-video id="ar-video2" src="#video2" width="1" height="0.65" position="0 0 0"></a-video>
-      <a-text value="Tapak Kajian @Gua Pelangi" position="0 -0.5 0" width="2" align="center" color="white"></a-text>
-    </a-entity>
-
-    <!-- Play Button in AR scene -->
+    <a-camera position="0 0 0" look-controls="enabled: false">
+      <!-- Play Button in AR scene -->
       <a-image 
         id="playButtonAR" 
         src="#play-icon" 
@@ -92,6 +79,20 @@
         position="-0.35 -0.2 0.01" 
         class="clickable">
       </a-image>
+
+    </a-camera>
+
+    <!-- Marker 1 with AR video and static buttons -->
+    <a-entity id="marker1" mindar-image-target="targetIndex: 0">
+      <a-video id="ar-video1" src="#video1" width="1" height="0.65" position="0 0 0"></a-video>
+      <a-text value="Batu Kapur @Gua Pelangi" position="0 -0.5 0" width="2" align="center" color="white"></a-text>
+    </a-entity>
+
+    <!-- Marker 2 remains basic -->
+    <a-entity id="marker2" mindar-image-target="targetIndex: 1">
+      <a-video id="ar-video2" src="#video2" width="1" height="0.65" position="0 0 0"></a-video>
+      <a-text value="Tapak Kajian @Gua Pelangi" position="0 -0.5 0" width="2" align="center" color="white"></a-text>
+    </a-entity>
   </a-scene>
 
   <script>
