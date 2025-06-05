@@ -117,27 +117,53 @@
       const marker1 = document.getElementById("marker1");
       const marker2 = document.getElementById("marker2");
 
+      let currentVisibleMarker = null;
+
+      // Marker 1 tracking
       marker1.addEventListener("targetFound", () => {
+        currentVisibleMarker = "marker1";
         video1.muted = false;
         video1.play().catch(() => {});
       });
 
       marker1.addEventListener("targetLost", () => {
+        currentVisibleMarker = null;
         video1.pause();
         video1.currentTime = 0;
       });
 
+      // Marker 2 tracking
       marker2.addEventListener("targetFound", () => {
+        currentVisibleMarker = "marker2";
         video2.muted = false;
         video2.play().catch(() => {});
       });
 
       marker2.addEventListener("targetLost", () => {
+        currentVisibleMarker = null;
         video2.pause();
         video2.currentTime = 0;
       });
 
-      // Hide loading screen after 5 seconds
+      // Play button logic based on visible marker
+      const playButton = document.getElementById("playButton");
+      playButton.addEventListener("click", () => {
+        if (currentVisibleMarker === "marker1") {
+          if (video1.paused) {
+            video1.play().catch(() => {});
+          } else {
+            video1.pause();
+          }
+        } else if (currentVisibleMarker === "marker2") {
+          if (video2.paused) {
+            video2.play().catch(() => {});
+          } else {
+            video2.pause();
+          }
+        }
+      });
+
+      // Hide loading screen
       setTimeout(() => {
         document.getElementById("loading").style.display = "none";
       }, 5000);
