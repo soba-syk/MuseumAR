@@ -116,7 +116,7 @@
 
 <body>
   <div id="loading">
-    <p>Loading Augmented Reality...(2)</p>
+    <p>Loading Augmented Reality...(1)</p>
   </div>
 
   <!-- Buttons fixed to screen -->
@@ -132,6 +132,7 @@
   </div>
 
   <a-scene
+    id="ar-scene"
     mindar-image="imageTargetSrc: ./guaPelangi.mind"
     color-space="sRGB"
     renderer="colorManagement: true, physicallyCorrectLights"
@@ -170,6 +171,7 @@
       const pinnedContainer = document.getElementById("pinned-video-container");
       const pinnedVideo = document.getElementById("pinned-video");
       const closePinBtn = document.getElementById("close-pin-btn");
+      const arScene = document.getElementById("ar-scene");
 
       let currentMarker = null;
       let currentPinnedVideo = null;
@@ -208,6 +210,7 @@
         }
       });
 
+      // Inside pinButton click event
       pinButton.addEventListener("click", () => {
         if (currentMarker === "marker1" && video1) {
           pinnedVideo.src = video1.src;
@@ -215,20 +218,24 @@
           pinnedVideo.play();
           pinnedContainer.style.display = "block";
           currentPinnedVideo = video1;
+          arScene.style.display = "none"; // 👈 Hide AR scene
         } else if (currentMarker === "marker2" && video2) {
           pinnedVideo.src = video2.src;
           pinnedVideo.currentTime = video2.currentTime;
           pinnedVideo.play();
           pinnedContainer.style.display = "block";
           currentPinnedVideo = video2;
+          arScene.style.display = "none"; // 👈 Hide AR scene
         }
       });
 
+      // Inside closePinBtn click event
       closePinBtn.addEventListener("click", () => {
         pinnedVideo.pause();
         pinnedVideo.currentTime = 0;
         pinnedContainer.style.display = "none";
         currentPinnedVideo = null;
+        arScene.style.display = "block"; // 👈 Show AR scene back
       });
 
       setTimeout(() => {
