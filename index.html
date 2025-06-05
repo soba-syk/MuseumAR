@@ -67,21 +67,23 @@
 </head>
 
 <body>
+  <!-- Loading screen -->
   <div id="loading">
     <div>
-      <p>Moh la poi alam Augmented Reality...(1)</p>
+      <p>Moh la poi alam Augmented Reality...(4)</p>
       <p style="font-size: 1rem; margin-top: 1em; color: #ccc;">
         Untuk pengguna iPhone, sila tap mana-mana pada skrin lepas loading untuk aktifkan video.
       </p>
     </div>
   </div>
 
-  <!-- ✅ Static screen buttons -->
+  <!-- Static screen buttons (outside of AR scene and loading) -->
   <div id="screen-buttons">
     <div id="playButton" class="control-btn"></div>
     <div id="pinButton" class="control-btn"></div>
   </div>
 
+  <!-- AR Scene -->
   <a-scene
     mindar-image="imageTargetSrc: ./guaPelangi.mind"
     color-space="sRGB"
@@ -97,13 +99,11 @@
 
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
 
-    <!-- Marker 1 -->
     <a-entity id="marker1" mindar-image-target="targetIndex: 0">
       <a-video id="ar-video1" src="#video1" width="1" height="0.65" position="0 0 0"></a-video>
       <a-text value="Batu Kapur @Gua Pelangi" position="0 -0.5 0" width="2" align="center" color="white"></a-text>
     </a-entity>
 
-    <!-- Marker 2 -->
     <a-entity id="marker2" mindar-image-target="targetIndex: 1">
       <a-video id="ar-video2" src="#video2" width="1" height="0.65" position="0 0 0"></a-video>
       <a-text value="Tapak Kajian @Gua Pelangi" position="0 -0.5 0" width="2" align="center" color="white"></a-text>
@@ -117,23 +117,14 @@
       const marker1 = document.getElementById("marker1");
       const marker2 = document.getElementById("marker2");
 
-      const playBtn = document.getElementById("playButton");
-      const pinBtn = document.getElementById("pinButton");
-
-      let pinned = false;
-
       marker1.addEventListener("targetFound", () => {
-        if (!pinned) {
-          video1.muted = false;
-          video1.play().catch(() => {});
-        }
+        video1.muted = false;
+        video1.play().catch(() => {});
       });
 
       marker1.addEventListener("targetLost", () => {
-        if (!pinned) {
-          video1.pause();
-          video1.currentTime = 0;
-        }
+        video1.pause();
+        video1.currentTime = 0;
       });
 
       marker2.addEventListener("targetFound", () => {
@@ -146,22 +137,10 @@
         video2.currentTime = 0;
       });
 
-      // Button Interactions
-      playBtn.addEventListener("click", () => {
-        if (video1.paused) {
-          video1.play();
-        } else {
-          video1.pause();
-        }
-      });
-
-      pinBtn.addEventListener("click", () => {
-        pinned = !pinned;
-        pinBtn.style.opacity = pinned ? "1" : "0.5";
-      });
-
       // Hide loading screen after 5 seconds
-      setTimeout(() => document.getElementById("loading").style.display = "none", 5000);
+      setTimeout(() => {
+        document.getElementById("loading").style.display = "none";
+      }, 5000);
     });
   </script>
 </body>
