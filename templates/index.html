@@ -70,11 +70,11 @@
     }
 
     #playButton {
-      background-image: url('play.png');
+      background-image: url('media\images\play.png');
     }
 
     #pinButton {
-      background-image: url('pin.png');
+      background-image: url('media\images\pin.png');
     }
 
     /* Pinned video overlay */
@@ -127,13 +127,13 @@
 
   <!-- Pinned video container -->
   <div id="pinned-video-container">
-    <img id="close-pin-btn" src="close.png" alt="Close" />
+    <img id="close-pin-btn" src="media\images\close.png" alt="Close" />
     <video id="pinned-video" controls muted></video>
   </div>
 
   <a-scene
     id="ar-scene"
-    mindar-image="imageTargetSrc: ./guaPelangi.mind"
+    mindar-image="imageTargetSrc: ./media\minds\guaPelangi.mind"
     color-space="sRGB"
     renderer="colorManagement: true, physicallyCorrectLights"
     embedded
@@ -141,8 +141,8 @@
     device-orientation-permission-ui="enabled: false"
   >
     <a-assets>
-      <video id="video1" src="./Batukapur.mp4" playsinline preload="auto" crossorigin="anonymous" style="display:none;"></video>
-      <video id="video2" src="./Tapakkajian.mp4" playsinline preload="auto" crossorigin="anonymous" style="display:none;"></video>
+      <video id="video1" src="./media\videos\Batukapur.mp4" playsinline preload="auto" crossorigin="anonymous" style="display:none;"></video>
+      <video id="video2" src="./media\videos\Tapakkajian.mp4" playsinline preload="auto" crossorigin="anonymous" style="display:none;"></video>
     </a-assets>
 
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
