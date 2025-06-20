@@ -4,7 +4,6 @@
   <meta charset="utf-8" />
   <title>Museum AR Testing</title>
 
-  <!-- Viewport for full screen, safe area, and proper scaling on all devices -->
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, viewport-fit=cover" />
 
   <!-- A-Frame & MindAR -->
@@ -36,10 +35,8 @@
       justify-content: center;
       font-size: 1.2rem;
       z-index: 9999;
-      padding: env(safe-area-inset-top, 0) env(safe-area-inset-right, 0) env(safe-area-inset-bottom, 0) env(safe-area-inset-left, 0);
     }
 
-    /* Fixed screen UI buttons - responsive and safe area aware */
     #screen-buttons {
       position: fixed;
       bottom: calc(env(safe-area-inset-bottom, 0) + 24px);
@@ -70,14 +67,13 @@
     }
 
     #playButton {
-      background-image: url('play.png');
+      background-image: url('images/play.png');
     }
 
     #pinButton {
-      background-image: url('pin.png');
+      background-image: url('images/pin.png');
     }
 
-    /* Pinned video overlay */
     #pinned-video-container {
       position: fixed;
       top: 50%;
@@ -119,21 +115,19 @@
     <p>Loading Augmented Reality...(1)</p>
   </div>
 
-  <!-- Buttons fixed to screen -->
   <div id="screen-buttons">
     <div id="playButton" class="control-btn"></div>
     <div id="pinButton" class="control-btn"></div>
   </div>
 
-  <!-- Pinned video container -->
   <div id="pinned-video-container">
-    <img id="close-pin-btn" src="close.png" alt="Close" />
+    <img id="close-pin-btn" src="images/close.png" alt="Close" />
     <video id="pinned-video" controls muted></video>
   </div>
 
   <a-scene
     id="ar-scene"
-    mindar-image="imageTargetSrc: ./guaPelangi.mind"
+    mindar-image="imageTargetSrc: minds/guaPelangi.mind"
     color-space="sRGB"
     renderer="colorManagement: true, physicallyCorrectLights"
     embedded
@@ -141,8 +135,8 @@
     device-orientation-permission-ui="enabled: false"
   >
     <a-assets>
-      <video id="video1" src="./Batukapur.mp4" playsinline preload="auto" crossorigin="anonymous" style="display:none;"></video>
-      <video id="video2" src="./Tapakkajian.mp4" playsinline preload="auto" crossorigin="anonymous" style="display:none;"></video>
+      <video id="video1" src="videos/Batukapur.mp4" playsinline preload="auto" crossorigin="anonymous" style="display:none;"></video>
+      <video id="video2" src="videos/Tapakkajian.mp4" playsinline preload="auto" crossorigin="anonymous" style="display:none;"></video>
     </a-assets>
 
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
@@ -210,7 +204,6 @@
         }
       });
 
-      // Inside pinButton click event
       pinButton.addEventListener("click", () => {
         if (currentMarker === "marker1" && video1) {
           pinnedVideo.src = video1.src;
@@ -218,24 +211,23 @@
           pinnedVideo.play();
           pinnedContainer.style.display = "block";
           currentPinnedVideo = video1;
-          arScene.style.display = "none"; // 👈 Hide AR scene
+          arScene.style.display = "none";
         } else if (currentMarker === "marker2" && video2) {
           pinnedVideo.src = video2.src;
           pinnedVideo.currentTime = video2.currentTime;
           pinnedVideo.play();
           pinnedContainer.style.display = "block";
           currentPinnedVideo = video2;
-          arScene.style.display = "none"; // 👈 Hide AR scene
+          arScene.style.display = "none";
         }
       });
 
-      // Inside closePinBtn click event
       closePinBtn.addEventListener("click", () => {
         pinnedVideo.pause();
         pinnedVideo.currentTime = 0;
         pinnedContainer.style.display = "none";
         currentPinnedVideo = null;
-        arScene.style.display = "block"; // 👈 Show AR scene back
+        arScene.style.display = "block";
       });
 
       setTimeout(() => {
