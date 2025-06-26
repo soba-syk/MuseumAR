@@ -127,7 +127,7 @@
 
   <a-scene
     id="ar-scene"
-    mindar-image="imageTargetSrc: minds/guaPelangi.mind"
+    mindar-image="imageTargetSrc: minds/panels.mind"
     color-space="sRGB"
     renderer="colorManagement: true, physicallyCorrectLights"
     embedded
@@ -137,6 +137,7 @@
     <a-assets>
       <video id="video1" src="videos/Fasa 1 Full.mp4" playsinline preload="auto" crossorigin="anonymous" style="display:none;"></video>
       <video id="video2" src="videos/Fasa 2 Full.mp4" playsinline preload="auto" crossorigin="anonymous" style="display:none;"></video>
+      <video id="video3" src="videos/Fasa 3 Full.mp4" playsinline preload="auto" crossorigin="anonymous" style="display:none;"></video>
     </a-assets>
 
     <a-camera position="0 0 0" look-controls="enabled: false"></a-camera>
@@ -152,14 +153,22 @@
       <a-video id="ar-video2" src="#video2" width="1" height="0.65" position="0 0 0"></a-video>
       <a-text value="Panel 2 @Gua Pelangi" position="0 -0.5 0" width="2" align="center" color="white"></a-text>
     </a-entity>
+
+    <!-- Marker 3 -->
+    <a-entity id="marker3" mindar-image-target="targetIndex: 2">
+      <a-video id="ar-video3" src="#video3" width="1" height="0.65" position="0 0 0"></a-video>
+      <a-text value="Panel 3 @Gua Pelangi" position="0 -0.5 0" width="2" align="center" color="white"></a-text>
+    </a-entity>
   </a-scene>
 
   <script>
     document.addEventListener("DOMContentLoaded", () => {
       const video1 = document.getElementById("video1");
       const video2 = document.getElementById("video2");
+      const video3 = document.getElementById("video3");
       const marker1 = document.getElementById("marker1");
       const marker2 = document.getElementById("marker2");
+      const marker3 = document.getElementById("marker3");
       const playButton = document.getElementById("playButton");
       const pinButton = document.getElementById("pinButton");
       const pinnedContainer = document.getElementById("pinned-video-container");
@@ -194,6 +203,18 @@
         currentMarker = null;
       });
 
+      marker3.addEventListener("targetFound", () => {
+        video3.muted = false;
+        video3.play().catch(() => {});
+        currentMarker = "marker3";
+      });
+
+      marker3.addEventListener("targetLost", () => {
+        video3.pause();
+        video3.currentTime = 0;
+        currentMarker = null;
+      });
+
       playButton.addEventListener("click", () => {
         if (currentMarker === "marker1") {
           if (video1.paused) video1.play();
@@ -218,6 +239,14 @@
           pinnedVideo.play();
           pinnedContainer.style.display = "block";
           currentPinnedVideo = video2;
+          arScene.style.display = "none";
+        }
+        else if (currentMarker === "marker3" && video3) {
+          pinnedVideo.src = video3.src;
+          pinnedVideo.currentTime = video3.currentTime;
+          pinnedVideo.play();
+          pinnedContainer.style.display = "block";
+          currentPinnedVideo = video3;
           arScene.style.display = "none";
         }
       });
