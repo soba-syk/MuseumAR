@@ -195,12 +195,12 @@
       });
 
       playButton.addEventListener("click", () => {
-        if (currentMarker === "marker1") {
-          if (video1.paused) video1.play();
-          else video1.pause();
-        } else if (currentMarker === "marker2") {
-          if (video2.paused) video2.play();
+        if (currentMarker === "marker2") {
+          if (video2.paused) video1.play();
           else video2.pause();
+        } else if (currentMarker === "marker3") {
+          if (video3.paused) video2.play();
+          else video3.pause();
         }
       });
 
