@@ -212,6 +212,7 @@
           pinnedContainer.style.display = "block";
           currentPinnedVideo = video2;
           arScene.style.display = "none";
+          video2.muted = true;
         }
         else if (currentMarker === "marker3" && video3) {
           pinnedVideo.src = video3.src;
@@ -220,6 +221,7 @@
           pinnedContainer.style.display = "block";
           currentPinnedVideo = video3;
           arScene.style.display = "none";
+          video3.muted = true;
         }
       });
 
