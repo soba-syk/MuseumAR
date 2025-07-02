@@ -251,7 +251,7 @@
         } else if (currentMarker === "marker3") {
           if (video3.paused) video3.play();
           else video3.pause();
-        } else (currentMarker === "marker4") {
+        } else if (currentMarker === "marker4") {
           if (video4.paused) video4.play();
           else video4.pause();
         }
@@ -282,7 +282,7 @@
           currentPinnedVideo = video3;
           arScene.style.display = "none";
         }
-        else (currentMarker === "marker4" && video4) {
+        else if (currentMarker === "marker4" && video4) {
           pinnedVideo.src = video4.src;
           pinnedVideo.currentTime = video4.currentTime;
           pinnedVideo.play();
